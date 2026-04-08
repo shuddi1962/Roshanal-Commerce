@@ -4,6 +4,7 @@ import AuthProvider from "@/components/providers/auth-provider";
 import ClientLayout from "@/components/layout/client-layout";
 import GeoInitializer from "@/components/geo/geo-initializer";
 import CookieConsent from "@/components/geo/cookie-consent";
+import ServiceWorkerRegister from "@/components/pwa/sw-register";
 
 export const metadata: Metadata = {
   title: {
@@ -24,6 +25,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     siteName: "Roshanal Global",
   },
+  manifest: "/manifest.json",
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black-translucent",
+    "apple-mobile-web-app-title": "Roshanal",
+  },
 };
 
 export default function RootLayout({
@@ -33,11 +41,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="theme-color" content="#0C1A36" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      </head>
       <body className="antialiased bg-off-white text-text-1">
         <AuthProvider>
           <GeoInitializer />
           <ClientLayout>{children}</ClientLayout>
           <CookieConsent />
+          <ServiceWorkerRegister />
         </AuthProvider>
       </body>
     </html>

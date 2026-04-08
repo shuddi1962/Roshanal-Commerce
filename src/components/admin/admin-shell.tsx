@@ -32,6 +32,12 @@ import {
   Menu,
   ExternalLink,
   ArrowLeft,
+  Gift,
+  Ticket,
+  Star,
+  BarChart3,
+  Navigation,
+  Anchor,
 } from "lucide-react";
 
 const sidebarSections = [
@@ -44,6 +50,8 @@ const sidebarSections = [
       { label: "Customers", icon: Users, href: "/admin/customers" },
       { label: "Inventory", icon: Layers, href: "/admin/inventory" },
       { label: "Reviews", icon: Heart, href: "/admin/reviews" },
+      { label: "Gift Cards", icon: Gift, href: "/admin/gift-cards" },
+      { label: "Coupons", icon: Ticket, href: "/admin/coupons" },
     ],
   },
   {
@@ -63,19 +71,39 @@ const sidebarSections = [
     ],
   },
   {
+    title: "Finance",
+    items: [
+      { label: "Payments & P&L", icon: CreditCard, href: "/admin/finance" },
+    ],
+  },
+  {
+    title: "Customers & CRM",
+    items: [
+      { label: "CRM Pipeline", icon: Users, href: "/admin/crm" },
+    ],
+  },
+  {
     title: "Operations",
     items: [
-      { label: "Shipping", icon: Truck, href: "/admin/shipping" },
-      { label: "Maintenance", icon: Wrench, href: "/admin/maintenance" },
+      { label: "Delivery", icon: Truck, href: "/admin/delivery" },
+      { label: "Warranty", icon: Shield, href: "/admin/warranty" },
+      { label: "Field Team", icon: Wrench, href: "/admin/field-team" },
+    ],
+  },
+  {
+    title: "AI & Automation",
+    items: [
+      { label: "AI Tools", icon: Globe, href: "/admin/ai" },
     ],
   },
   {
     title: "Content & Design",
     items: [
       { label: "Homepage Builder", icon: Palette, href: "/admin/homepage" },
+      { label: "Page Builder", icon: FileText, href: "/admin/pages" },
+      { label: "Menu Builder", icon: Navigation, href: "/admin/menu" },
       { label: "Banner Builder", icon: Image, href: "/admin/banners/builder" },
       { label: "Footer Builder", icon: Layers, href: "/admin/footer" },
-      { label: "Page Builder", icon: FileText, href: "/admin/pages" },
     ],
   },
   {
@@ -83,6 +111,7 @@ const sidebarSections = [
     items: [
       { label: "Vendors", icon: Store, href: "/admin/vendors" },
       { label: "Vendor Ads", icon: Megaphone, href: "/admin/vendor-ads" },
+      { label: "Boat Configurator", icon: Anchor, href: "/admin/boat-configurator" },
     ],
   },
   {
@@ -90,7 +119,7 @@ const sidebarSections = [
     items: [
       { label: "Settings", icon: Settings, href: "/admin/settings" },
       { label: "Roles", icon: Shield, href: "/admin/roles" },
-      { label: "Analytics", icon: Globe, href: "/admin/analytics" },
+      { label: "Analytics", icon: BarChart3, href: "/admin/analytics" },
       { label: "Feature Flags", icon: Plug, href: "/admin/features" },
       { label: "Site Doctor", icon: AlertTriangle, href: "/admin/site-doctor" },
     ],

@@ -8,6 +8,11 @@ import NoticeBar from "./notice-bar";
 import MainHeader from "./main-header";
 import Navigation from "./navigation";
 import Footer from "./footer";
+import ToastContainer from "@/components/notifications/toast-container";
+import SocialProofPopup from "@/components/notifications/social-proof-popup";
+import AIChatWidget from "@/components/chat/ai-chat-widget";
+import WhatsAppButton from "@/components/chat/whatsapp-button";
+import CampaignPopup from "@/components/popups/campaign-popup";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -69,6 +74,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       >
         <ChevronUp size={20} />
       </button>
+
+      {/* Global Widgets */}
+      <ToastContainer />
+      <SocialProofPopup />
+      <AIChatWidget />
+      <WhatsAppButton />
+      <CampaignPopup />
     </>
   );
 }
