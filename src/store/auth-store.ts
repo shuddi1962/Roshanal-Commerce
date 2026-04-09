@@ -38,6 +38,24 @@ export const useAuthStore = create<AuthStore>((set) => ({
       const { data } = await insforge.auth.getCurrentUser();
       if (data?.user) {
         const profile = data.user.profile as Record<string, string> | undefined;
+        let role = profile?.role || "customer";
+
+        // Fetch role from profiles table if not in auth profile
+        if (!profile?.role) {
+          try {
+            const { data: profileRows } = await insforge.database
+              .from("profiles")
+              .select("role")
+              .eq("id", data.user.id)
+              .limit(1);
+            if (profileRows && profileRows.length > 0 && profileRows[0].role) {
+              role = profileRows[0].role;
+            }
+          } catch {
+            // fallback to customer
+          }
+        }
+
         set({
           user: {
             id: data.user.id,
@@ -45,7 +63,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
             name: profile?.name,
             avatar: profile?.avatar_url,
             phone: profile?.phone,
-            role: profile?.role || "customer",
+            role,
           },
           loading: false,
         });
@@ -68,6 +86,24 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
     if (data?.user) {
       const profile = data.user.profile as Record<string, string> | undefined;
+      let role = profile?.role || "customer";
+
+      // Fetch role from profiles table if not in auth profile
+      if (!profile?.role) {
+        try {
+          const { data: profileRows } = await insforge.database
+            .from("profiles")
+            .select("role")
+            .eq("id", data.user.id)
+            .limit(1);
+          if (profileRows && profileRows.length > 0 && profileRows[0].role) {
+            role = profileRows[0].role;
+          }
+        } catch {
+          // fallback to customer
+        }
+      }
+
       set({
         user: {
           id: data.user.id,
@@ -75,7 +111,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
           name: profile?.name,
           avatar: profile?.avatar_url,
           phone: profile?.phone,
-          role: profile?.role || "customer",
+          role,
         },
         loading: false,
       });
