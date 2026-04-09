@@ -30,8 +30,6 @@ export default function SocialProofPopup() {
       const product = getRandomItem(products);
       const name = getRandomItem(nigerianNames);
       const city = getRandomItem(nigerianCities);
-      const minutes = Math.floor(Math.random() * 30) + 1;
-
       addNotification({
         type: "social-proof",
         title: `${name} from ${city}`,

@@ -9,7 +9,6 @@ import {
   Clock,
   TrendingUp,
   ArrowRight,
-  X,
   Tag,
   Layers,
   Package,

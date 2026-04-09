@@ -3,8 +3,8 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Menu, Plus, GripVertical, Trash2, Edit, ChevronRight, ChevronDown,
-  Link as LinkIcon, ExternalLink, Eye, Save, Undo, Copy,
+  Plus, GripVertical, Trash2, Edit, ChevronRight,
+  Save, Undo,
 } from "lucide-react";
 
 interface MenuItem {
@@ -56,8 +56,7 @@ const defaultMenus: Record<string, MenuItem[]> = {
 
 export default function AdminMenuPage() {
   const [activeMenu, setActiveMenu] = useState<"main" | "footer" | "mobile">("main");
-  const [items, setItems] = useState(defaultMenus);
-  const [editingItem, setEditingItem] = useState<string | null>(null);
+  const [items] = useState(defaultMenus);
   const [newItem, setNewItem] = useState({ label: "", url: "" });
 
   const renderMenuItem = (item: MenuItem, depth: number = 0) => (

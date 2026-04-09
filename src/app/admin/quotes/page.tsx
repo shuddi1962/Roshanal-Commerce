@@ -4,7 +4,7 @@ import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
   FileText, Search, Plus, Eye, Edit, Trash2, Send, CheckCircle2,
-  Clock, XCircle, DollarSign, TrendingUp, Users, Download,
+  DollarSign, TrendingUp, Download,
 } from "lucide-react";
 
 const demoQuotes = [

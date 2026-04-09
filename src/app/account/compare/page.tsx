@@ -33,7 +33,7 @@ const specRows = [
 export default function ComparePage() {
   const { compareItems, toggleCompare } = useUIStore();
   const { addItem } = useCartStore();
-  const { formatPrice, formatNGN, currency } = useCurrencyStore();
+  const { formatPrice } = useCurrencyStore();
 
   const compareProducts = compareItems
     .map((id) => products.find((p) => p.id === id))

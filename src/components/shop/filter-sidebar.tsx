@@ -68,6 +68,7 @@ function CollapsibleSection({
 export default function FilterSidebar({
   filters,
   onFilterChange,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   filteredProducts,
 }: FilterSidebarProps) {
   const { formatPrice } = useCurrencyStore();

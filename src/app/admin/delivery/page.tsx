@@ -3,8 +3,8 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Truck, Search, MapPin, Phone, Star, CheckCircle2, Clock, Package,
-  Eye, Edit, Plus, Navigation, AlertTriangle, Users,
+  Truck, MapPin, Star, CheckCircle2,
+  Eye, Plus, AlertTriangle, Users,
 } from "lucide-react";
 
 const demoRiders = [
@@ -25,7 +25,6 @@ const demoDeliveries = [
 
 export default function AdminDeliveryPage() {
   const [tab, setTab] = useState<"riders" | "active" | "zones">("riders");
-  const [filter, setFilter] = useState("all");
 
   return (
     <AdminShell title="Delivery Management" subtitle="Manage delivery riders and track shipments">

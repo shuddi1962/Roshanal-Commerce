@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NEXT_PUBLIC_SITE_NAME = "Roshanal Global"
+
+# Next.js on Netlify uses @netlify/plugin-nextjs automatically
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

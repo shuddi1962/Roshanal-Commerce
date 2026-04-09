@@ -4,8 +4,6 @@ import {
   Trophy,
   Star,
   Gift,
-  ArrowRight,
-  ChevronRight,
   Crown,
   Gem,
   Medal,

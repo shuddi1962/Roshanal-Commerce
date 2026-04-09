@@ -3,7 +3,7 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Calendar, Clock, User, MapPin, Phone, Mail, DollarSign,
+  Calendar, Clock, User, DollarSign,
   Check, X, ChevronLeft, ChevronRight, Filter, Plus, Eye,
   Wrench, Ship, Shield, ChefHat,
 } from "lucide-react";
@@ -54,7 +54,7 @@ const months = ["January", "February", "March", "April", "May", "June", "July", 
 export default function BookingsPage() {
   const [activeTab, setActiveTab] = useState<"calendar" | "list" | "new">("list");
   const [currentMonth, setCurrentMonth] = useState(new Date(2026, 3)); // April 2026
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [, setSelectedDate] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState("all");
 
   const year = currentMonth.getFullYear();

@@ -7,7 +7,6 @@ import {
   CreditCard,
   Tag,
   AlertCircle,
-  CheckCircle,
   Truck,
   Gift,
   Star,

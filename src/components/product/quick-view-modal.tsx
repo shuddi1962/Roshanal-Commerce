@@ -17,27 +17,21 @@ interface QuickViewModalProps {
 
 export default function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps) {
   const [quantity, setQuantity] = useState(1);
-  const [selectedVariant, setSelectedVariant] = useState(0);
   const [wishlisted, setWishlisted] = useState(false);
   const { formatPrice, convert } = useCurrencyStore();
   const { addItem } = useCartStore();
-  const { addWishlistItem } = useUIStore();
+  const { toggleWishlist } = useUIStore();
 
   if (!product) return null;
 
-  const price = convert(product.price);
-  const comparePrice = product.compareAtPrice ? convert(product.compareAtPrice) : null;
-  const discount = comparePrice ? Math.round(((comparePrice - price) / comparePrice) * 100) : 0;
+  const price = convert(product.regularPrice);
+  const comparePrice = product.salePrice ? convert(product.salePrice) : null;
+  const displayPrice = comparePrice || price;
+  const originalPrice = comparePrice ? price : null;
+  const discount = originalPrice ? Math.round(((originalPrice - displayPrice) / originalPrice) * 100) : 0;
 
   const handleAddToCart = () => {
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      slug: product.slug,
-      image: product.images?.[0]?.url || "",
-      quantity,
-    });
+    addItem(product, quantity);
     onClose();
   };
 
@@ -84,9 +78,9 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 {/* Brand & Category */}
                 <div className="flex items-center gap-2 mb-2">
                   {product.brand && (
-                    <span className="text-[10px] bg-blue/10 text-blue font-semibold px-2 py-0.5 rounded-full">{product.brand}</span>
+                    <span className="text-[10px] bg-blue/10 text-blue font-semibold px-2 py-0.5 rounded-full">{product.brand.name}</span>
                   )}
-                  <span className="text-[10px] text-text-4">{product.category}</span>
+                  <span className="text-[10px] text-text-4">{product.category.name}</span>
                 </div>
 
                 {/* Title */}
@@ -110,15 +104,15 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
 
                 {/* Price */}
                 <div className="flex items-baseline gap-2 mb-4">
-                  <span className="text-2xl font-bold text-text-1">{formatPrice(price)}</span>
-                  {comparePrice && (
-                    <span className="text-sm text-text-4 line-through">{formatPrice(comparePrice)}</span>
+                  <span className="text-2xl font-bold text-text-1">{formatPrice(displayPrice)}</span>
+                  {originalPrice && (
+                    <span className="text-sm text-text-4 line-through">{formatPrice(originalPrice)}</span>
                   )}
                 </div>
 
                 {/* Short description */}
                 <p className="text-sm text-text-3 leading-relaxed mb-4 line-clamp-3">
-                  {product.description || "Premium quality product from Roshanal Global. Available for immediate delivery."}
+                  {product.shortDescription || "Premium quality product from Roshanal Global. Available for immediate delivery."}
                 </p>
 
                 {/* Stock status */}
@@ -134,14 +128,14 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 </div>
 
                 {/* Location availability */}
-                {product.locationInventory && product.locationInventory.length > 0 && (
+                {product.inventory && product.inventory.length > 0 && (
                   <div className="mb-4 p-3 bg-off-white rounded-xl">
                     <p className="text-[10px] text-text-4 font-semibold uppercase tracking-wider mb-2">Available at</p>
                     <div className="flex flex-wrap gap-1.5">
-                      {product.locationInventory.map((loc) => (
-                        <span key={loc.location} className="flex items-center gap-1 text-[11px] text-text-2 bg-white px-2 py-1 rounded-lg border border-border">
+                      {product.inventory.map((loc) => (
+                        <span key={loc.locationId} className="flex items-center gap-1 text-[11px] text-text-2 bg-white px-2 py-1 rounded-lg border border-border">
                           <MapPin size={10} className="text-blue" />
-                          {loc.location}
+                          {loc.locationName}
                         </span>
                       ))}
                     </div>
@@ -173,7 +167,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     Add to Cart
                   </button>
                   <button
-                    onClick={() => { setWishlisted(!wishlisted); addWishlistItem(product.id); }}
+                    onClick={() => { setWishlisted(!wishlisted); toggleWishlist(product.id); }}
                     className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-colors ${
                       wishlisted ? "bg-red/10 border-red/30 text-red" : "border-border text-text-4 hover:text-red hover:border-red/30"
                     }`}

@@ -218,7 +218,7 @@ export default function HomepageBuilderPage() {
           <div className={`border border-gray-200 rounded-lg overflow-hidden bg-off-white ${
             previewMode === "mobile" ? "max-w-[280px] mx-auto" : ""
           }`}>
-            {sorted.filter((s) => s.enabled).map((section, idx) => (
+            {sorted.filter((s) => s.enabled).map((section) => (
               <div
                 key={section.id}
                 className="border-b border-dashed border-gray-200 last:border-0 p-2 hover:bg-blue/5 transition-colors cursor-pointer"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useUIStore } from "@/store/ui-store";
-import { demoProducts } from "@/lib/demo-data";
+import { products as allProducts } from "@/lib/demo-data";
 import Link from "next/link";
 import { useCurrencyStore } from "@/store/currency-store";
 import { Eye, ShoppingCart } from "lucide-react";
@@ -13,12 +13,12 @@ export default function RecentlyViewed() {
   const { addItem } = useCartStore();
 
   // Match recently viewed IDs to demo products
-  const products = recentlyViewed
-    .map((id) => demoProducts.find((p) => p.id === id))
+  const viewed = recentlyViewed
+    .map((id) => allProducts.find((p) => p.id === id))
     .filter(Boolean)
     .slice(0, 8);
 
-  if (products.length === 0) return null;
+  if (viewed.length === 0) return null;
 
   return (
     <section className="py-10">
@@ -34,10 +34,10 @@ export default function RecentlyViewed() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          {products.map((product) => {
+          {viewed.map((product) => {
             if (!product) return null;
-            const price = convert(product.price);
-            const comparePrice = product.compareAtPrice ? convert(product.compareAtPrice) : null;
+            const price = convert(product.salePrice || product.regularPrice);
+            const comparePrice = product.salePrice ? convert(product.regularPrice) : null;
 
             return (
               <div key={product.id} className="group bg-white rounded-xl border border-border overflow-hidden hover:shadow-medium transition-shadow">
@@ -62,7 +62,7 @@ export default function RecentlyViewed() {
                     )}
                   </div>
                   <button
-                    onClick={() => addItem({ id: product.id, name: product.name, price: product.price, slug: product.slug, image: product.images?.[0]?.url || "" })}
+                    onClick={() => addItem(product)}
                     className="mt-2 w-full py-1.5 rounded-lg bg-blue/5 text-blue text-[11px] font-semibold hover:bg-blue hover:text-white transition-colors flex items-center justify-center gap-1"
                   >
                     <ShoppingCart size={12} />

@@ -3,8 +3,8 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Ticket, Plus, Search, Edit, Trash2, Copy, ToggleLeft, ToggleRight,
-  Percent, DollarSign, Calendar, Users, Tag, TrendingUp,
+  Ticket, Plus, Search, Edit, Trash2, Copy,
+  Percent, DollarSign, TrendingUp,
 } from "lucide-react";
 
 const demoCoupons = [
@@ -20,8 +20,6 @@ export default function AdminCouponsPage() {
   const [tab, setTab] = useState<"list" | "create">("list");
   const [search, setSearch] = useState("");
   const [newCoupon, setNewCoupon] = useState({ code: "", type: "percentage", value: 10, minOrder: 0, maxDiscount: 0, usageLimit: 0, perUser: 1, startDate: "", endDate: "", applies: "all" });
-
-  const totalSavings = demoCoupons.reduce((a, c) => a + (c.type === "fixed" ? c.value * c.usedCount : 0), 0);
 
   return (
     <AdminShell title="Coupons & Discounts" subtitle="Create and manage promotional coupons">

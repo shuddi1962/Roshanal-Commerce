@@ -3,11 +3,11 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Search, Plus, Minus, Trash2, CreditCard, Banknote, Smartphone,
-  QrCode, ShoppingCart, User, Receipt, Printer, Clock, Tag,
-  ChevronDown, X, Check, Package,
+  Search, Plus, Minus, CreditCard, Banknote, Smartphone,
+  QrCode, ShoppingCart, User, Receipt, Clock, Tag,
+  X, Check, Package,
 } from "lucide-react";
-import { demoProducts } from "@/lib/demo-data";
+import { products as demoProducts } from "@/lib/demo-data";
 
 interface POSItem {
   id: string;
@@ -51,7 +51,7 @@ export default function POSPage() {
       if (existing) {
         return prev.map((i) => i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i);
       }
-      return [...prev, { id: product.id, name: product.name, price: product.price, quantity: 1 }];
+      return [...prev, { id: product.id, name: product.name, price: product.regularPrice, quantity: 1 }];
     });
   };
 
@@ -165,7 +165,7 @@ export default function POSPage() {
                       <Package size={20} className="text-text-4 group-hover:text-blue transition-colors" />
                     </div>
                     <p className="text-[11px] font-medium text-text-2 line-clamp-2 leading-snug">{product.name}</p>
-                    <p className="text-xs font-bold text-text-1 mt-1">₦{product.price.toLocaleString()}</p>
+                    <p className="text-xs font-bold text-text-1 mt-1">₦{product.regularPrice.toLocaleString()}</p>
                   </button>
                 ))}
               </div>

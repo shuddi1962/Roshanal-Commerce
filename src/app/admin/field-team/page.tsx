@@ -3,8 +3,8 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Wrench, Search, Plus, Eye, Phone, MapPin, Calendar, CheckCircle2,
-  Clock, AlertTriangle, Star, Users, ClipboardList, Briefcase,
+  Wrench, Plus, Phone, MapPin, Calendar, CheckCircle2,
+  AlertTriangle, Star, Users,
 } from "lucide-react";
 
 const demoTechnicians = [

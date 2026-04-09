@@ -3,13 +3,11 @@
 import { useState } from "react";
 import {
   RotateCcw,
-  Package,
   ChevronRight,
   AlertCircle,
   CheckCircle,
   Clock,
   Truck,
-  Search,
   Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

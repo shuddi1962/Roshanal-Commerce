@@ -3,8 +3,8 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Shield, Search, Plus, Eye, Edit, CheckCircle2, Clock, AlertTriangle,
-  XCircle, Package, Calendar, FileText, Download, Mail,
+  Shield, Search, Plus, Eye, CheckCircle2, Clock, AlertTriangle,
+  Mail,
 } from "lucide-react";
 
 const demoWarranties = [

@@ -3,8 +3,8 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Anchor, Plus, Eye, Edit, Trash2, Sparkles, Save, Download,
-  Settings, Ruler, Gauge, Shield, Palette, DollarSign, Image,
+  Anchor, Eye, Edit, Trash2, Sparkles, Save, Download,
+  Settings, Gauge, DollarSign, Image,
 } from "lucide-react";
 
 const vesselTypes = [

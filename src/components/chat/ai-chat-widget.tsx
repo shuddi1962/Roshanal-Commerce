@@ -7,8 +7,6 @@ import {
   X,
   Send,
   Minimize2,
-  Bot,
-  User,
   Mic,
   Paperclip,
   ChevronDown,

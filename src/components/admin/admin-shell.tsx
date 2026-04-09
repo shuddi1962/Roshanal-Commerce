@@ -34,7 +34,6 @@ import {
   ArrowLeft,
   Gift,
   Ticket,
-  Star,
   BarChart3,
   Navigation,
   Anchor,

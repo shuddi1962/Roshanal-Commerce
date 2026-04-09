@@ -3,9 +3,9 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Eye,
-  Package, ArrowUpRight, ArrowDownRight, Globe, Smartphone, Monitor,
-  Clock, MapPin, BarChart3, PieChart,
+  TrendingUp, DollarSign, ShoppingCart, Users, Eye,
+  Package, ArrowUpRight, ArrowDownRight, Smartphone, Monitor,
+  Clock, MapPin, BarChart3,
 } from "lucide-react";
 
 const kpis = [

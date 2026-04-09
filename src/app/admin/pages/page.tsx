@@ -3,9 +3,9 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  FileText, Plus, Search, Eye, Edit, Trash2, Copy, GripVertical,
+  Plus, Search, Eye, Edit, Trash2, Copy, GripVertical,
   Layout, Type, Image, Video, ShoppingBag, Star, MessageSquare,
-  Columns, Sparkles, Code, ChevronRight, CheckCircle2, Globe,
+  Columns, Sparkles, Code,
 } from "lucide-react";
 
 const demoPages = [

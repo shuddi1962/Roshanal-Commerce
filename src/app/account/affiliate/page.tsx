@@ -11,7 +11,6 @@ import {
   UserPlus,
   ArrowUpRight,
   Gift,
-  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCurrencyStore } from "@/store/currency-store";

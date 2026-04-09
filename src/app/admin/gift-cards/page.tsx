@@ -3,8 +3,8 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Gift, Plus, Search, Download, Eye, Edit, Trash2, Copy, CheckCircle2,
-  XCircle, DollarSign, TrendingUp, Users, Calendar,
+  Gift, Plus, Search, Eye, Edit, Trash2, Copy, CheckCircle2,
+  DollarSign, TrendingUp,
 } from "lucide-react";
 
 const demoCards = [

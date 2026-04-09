@@ -3,8 +3,8 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Star, ThumbsUp, ThumbsDown, Eye, Trash2, CheckCircle2, XCircle,
-  MessageSquare, Filter, Search, ChevronDown, Image as ImageIcon, Flag,
+  Star, ThumbsUp, Trash2, CheckCircle2, XCircle,
+  MessageSquare, Search, Image as ImageIcon, Flag,
 } from "lucide-react";
 
 const demoReviews = [

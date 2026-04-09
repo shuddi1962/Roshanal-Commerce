@@ -3,9 +3,9 @@
 import { useState } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  Search, Globe, TrendingUp, FileText, Link2, Image, AlertTriangle,
-  Check, X, ChevronDown, BarChart3, Eye, ExternalLink, RefreshCw,
-  Settings, Zap, Code,
+  Search, Globe, TrendingUp, FileText, Link2, AlertTriangle,
+  Check, X, BarChart3, ExternalLink, RefreshCw,
+  Zap, Code,
 } from "lucide-react";
 
 const tabs = [

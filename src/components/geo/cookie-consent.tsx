@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cookie, X, Settings, Shield } from "lucide-react";
+import { Cookie, Settings, Shield } from "lucide-react";
 
 const CONSENT_KEY = "roshanal-cookie-consent";
 

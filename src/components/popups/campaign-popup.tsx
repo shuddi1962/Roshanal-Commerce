@@ -91,7 +91,7 @@ export default function CampaignPopup() {
     setDismissed((prev) => {
       const next = new Set(prev);
       next.add(id);
-      localStorage.setItem("roshanal-dismissed-popups", JSON.stringify([...next]));
+      localStorage.setItem("roshanal-dismissed-popups", JSON.stringify(Array.from(next)));
       return next;
     });
   }, []);
