@@ -20,15 +20,28 @@ export default function AdminVendorsPage() {
   const [tab, setTab] = useState<"vendors" | "payouts" | "settings">("vendors");
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [vendors, setVendors] = useState(demoVendors);
+  const [selectedVendor, setSelectedVendor] = useState<number | null>(null);
 
-  const filtered = demoVendors.filter((v) => {
+  const filtered = vendors.filter((v) => {
     if (filter !== "all" && v.status !== filter) return false;
     if (search && !v.name.toLowerCase().includes(search.toLowerCase()) && !v.owner.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
 
-  const totalRevenue = demoVendors.reduce((a, v) => a + v.revenue, 0);
-  const totalCommission = demoVendors.reduce((a, v) => a + (v.revenue * v.commission / 100), 0);
+  const totalRevenue = vendors.reduce((a, v) => a + v.revenue, 0);
+  const totalCommission = vendors.reduce((a, v) => a + (v.revenue * v.commission / 100), 0);
+
+  const handleApprove = (id: number) => {
+    setVendors((prev) => prev.map((v) => v.id === id ? { ...v, status: "active" } : v));
+    alert("Vendor approved successfully!");
+  };
+
+  const handleSuspend = (id: number) => {
+    if (confirm("Are you sure you want to suspend this vendor?")) {
+      setVendors((prev) => prev.map((v) => v.id === id ? { ...v, status: "suspended" } : v));
+    }
+  };
 
   return (
     <AdminShell title="Vendor Management" subtitle="Manage marketplace vendors and commissions">
@@ -91,13 +104,13 @@ export default function AdminVendorsPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
-                      <button className="p-1.5 hover:bg-gray-100 rounded-lg" title="View"><Eye size={16} className="text-text-4" /></button>
-                      <button className="p-1.5 hover:bg-gray-100 rounded-lg" title="Edit"><Edit size={16} className="text-text-4" /></button>
-                      <button className="p-1.5 hover:bg-gray-100 rounded-lg" title="Email"><Mail size={16} className="text-text-4" /></button>
+                      <button onClick={() => setSelectedVendor(selectedVendor === vendor.id ? null : vendor.id)} className="p-1.5 hover:bg-gray-100 rounded-lg" title="View"><Eye size={16} className="text-text-4" /></button>
+                      <button onClick={() => setSelectedVendor(vendor.id)} className="p-1.5 hover:bg-gray-100 rounded-lg" title="Edit"><Edit size={16} className="text-text-4" /></button>
+                      <button onClick={() => { window.location.href = `mailto:${vendor.email}`; }} className="p-1.5 hover:bg-gray-100 rounded-lg" title="Email"><Mail size={16} className="text-text-4" /></button>
                       {vendor.status === "active" ? (
-                        <button className="p-1.5 hover:bg-red-50 rounded-lg" title="Suspend"><Ban size={16} className="text-red" /></button>
+                        <button onClick={() => handleSuspend(vendor.id)} className="p-1.5 hover:bg-red-50 rounded-lg" title="Suspend"><Ban size={16} className="text-red" /></button>
                       ) : vendor.status === "pending" ? (
-                        <button className="p-1.5 hover:bg-green-50 rounded-lg" title="Approve"><CheckCircle2 size={16} className="text-green-600" /></button>
+                        <button onClick={() => handleApprove(vendor.id)} className="p-1.5 hover:bg-green-50 rounded-lg" title="Approve"><CheckCircle2 size={16} className="text-green-600" /></button>
                       ) : null}
                     </div>
                   </div>

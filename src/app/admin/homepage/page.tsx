@@ -101,6 +101,7 @@ export default function HomepageBuilderPage() {
           </button>
           <button
             disabled={!hasChanges}
+            onClick={() => { setHasChanges(false); alert("Homepage layout saved successfully!"); }}
             className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue text-white text-xs font-semibold hover:bg-blue-600 transition-colors disabled:opacity-40"
           >
             <Save size={14} />

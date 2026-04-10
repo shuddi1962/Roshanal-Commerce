@@ -26,18 +26,27 @@ const statusColors: Record<string, string> = {
 export default function AdminReviewsPage() {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [reviews, setReviews] = useState(demoReviews);
 
-  const filtered = demoReviews.filter((r) => {
+  const filtered = reviews.filter((r) => {
     if (filter !== "all" && r.status !== filter) return false;
     if (search && !r.product.toLowerCase().includes(search.toLowerCase()) && !r.customer.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
 
-  const avgRating = (demoReviews.reduce((a, b) => a + b.rating, 0) / demoReviews.length).toFixed(1);
+  const handleAction = (id: number, action: string) => {
+    if (action === "approve") setReviews((prev) => prev.map((r) => r.id === id ? { ...r, status: "approved" } : r));
+    else if (action === "reject") setReviews((prev) => prev.map((r) => r.id === id ? { ...r, status: "rejected" } : r));
+    else if (action === "flag") setReviews((prev) => prev.map((r) => r.id === id ? { ...r, status: "flagged" } : r));
+    else if (action === "delete") { if (confirm("Delete this review?")) setReviews((prev) => prev.filter((r) => r.id !== id)); }
+    else if (action === "reply") alert("Reply feature: Compose your response to this review.");
+  };
+
+  const avgRating = (reviews.reduce((a, b) => a + b.rating, 0) / reviews.length).toFixed(1);
   const ratingDist = [5, 4, 3, 2, 1].map((r) => ({
     stars: r,
-    count: demoReviews.filter((rev) => rev.rating === r).length,
-    pct: Math.round((demoReviews.filter((rev) => rev.rating === r).length / demoReviews.length) * 100),
+    count: reviews.filter((rev) => rev.rating === r).length,
+    pct: Math.round((reviews.filter((rev) => rev.rating === r).length / reviews.length) * 100),
   }));
 
   return (
@@ -144,19 +153,19 @@ export default function AdminReviewsPage() {
                   {review.images > 0 && <span className="flex items-center gap-1"><ImageIcon size={12} /> {review.images} photos</span>}
                 </div>
                 <div className="flex items-center gap-1">
-                  <button className="p-1.5 hover:bg-green-50 rounded-lg transition-colors" title="Approve">
+                  <button onClick={() => handleAction(review.id, "approve")} className="p-1.5 hover:bg-green-50 rounded-lg transition-colors" title="Approve">
                     <CheckCircle2 size={16} className="text-green-600" />
                   </button>
-                  <button className="p-1.5 hover:bg-red-50 rounded-lg transition-colors" title="Reject">
+                  <button onClick={() => handleAction(review.id, "reject")} className="p-1.5 hover:bg-red-50 rounded-lg transition-colors" title="Reject">
                     <XCircle size={16} className="text-red" />
                   </button>
-                  <button className="p-1.5 hover:bg-yellow-50 rounded-lg transition-colors" title="Flag">
+                  <button onClick={() => handleAction(review.id, "flag")} className="p-1.5 hover:bg-yellow-50 rounded-lg transition-colors" title="Flag">
                     <Flag size={16} className="text-yellow-600" />
                   </button>
-                  <button className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors" title="Reply">
+                  <button onClick={() => handleAction(review.id, "reply")} className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors" title="Reply">
                     <MessageSquare size={16} className="text-blue" />
                   </button>
-                  <button className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors" title="Delete">
+                  <button onClick={() => handleAction(review.id, "delete")} className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors" title="Delete">
                     <Trash2 size={16} className="text-text-4" />
                   </button>
                 </div>

@@ -36,10 +36,41 @@ export default function AdminPagesPage() {
   const [tab, setTab] = useState<"pages" | "builder">("pages");
   const [search, setSearch] = useState("");
   const [builderSections, setBuilderSections] = useState<string[]>(["Hero Banner", "Text Block", "Product Grid"]);
+  const [pages, setPages] = useState(demoPages);
+  const [pageTitle, setPageTitle] = useState("");
+  const [pageSlug, setPageSlug] = useState("");
 
-  const filtered = demoPages.filter((p) =>
+  const filtered = pages.filter((p) =>
     !search || p.title.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleDeletePage = (id: number) => {
+    if (confirm("Delete this page? This cannot be undone.")) {
+      setPages((prev) => prev.filter((p) => p.id !== id));
+    }
+  };
+
+  const handleDuplicatePage = (page: typeof demoPages[0]) => {
+    const newPage = { ...page, id: Date.now(), title: `${page.title} (Copy)`, slug: `${page.slug}-copy`, status: "draft" as const, lastModified: new Date().toISOString().split("T")[0] };
+    setPages((prev) => [...prev, newPage]);
+    alert(`Page "${page.title}" duplicated successfully!`);
+  };
+
+  const handlePublish = () => {
+    if (!pageTitle) { alert("Please enter a page title."); return; }
+    const newPage = { id: Date.now(), title: pageTitle, slug: pageSlug || `/${pageTitle.toLowerCase().replace(/\s+/g, "-")}`, status: "published" as const, lastModified: new Date().toISOString().split("T")[0], author: "Admin", template: "Standard" };
+    setPages((prev) => [...prev, newPage]);
+    setPageTitle(""); setPageSlug(""); setBuilderSections([]);
+    setTab("pages");
+    alert(`Page "${newPage.title}" published!`);
+  };
+
+  const handleSaveDraft = () => {
+    if (!pageTitle) { alert("Please enter a page title."); return; }
+    const newPage = { id: Date.now(), title: pageTitle, slug: pageSlug || `/${pageTitle.toLowerCase().replace(/\s+/g, "-")}`, status: "draft" as const, lastModified: new Date().toISOString().split("T")[0], author: "Admin", template: "Standard" };
+    setPages((prev) => [...prev, newPage]);
+    alert(`Draft "${newPage.title}" saved!`);
+  };
 
   return (
     <AdminShell title="Page Builder" subtitle="Create and manage custom pages with drag-drop blocks">
@@ -79,10 +110,10 @@ export default function AdminPagesPage() {
                       </td>
                       <td className="p-4 text-text-4 text-xs">{page.lastModified}</td>
                       <td className="p-4"><div className="flex gap-1">
-                        <button className="p-1.5 hover:bg-gray-100 rounded-lg"><Eye size={14} className="text-text-4" /></button>
-                        <button className="p-1.5 hover:bg-gray-100 rounded-lg"><Edit size={14} className="text-text-4" /></button>
-                        <button className="p-1.5 hover:bg-gray-100 rounded-lg"><Copy size={14} className="text-text-4" /></button>
-                        <button className="p-1.5 hover:bg-red-50 rounded-lg"><Trash2 size={14} className="text-red" /></button>
+                        <button onClick={() => window.open(page.slug, "_blank")} className="p-1.5 hover:bg-gray-100 rounded-lg" title="View"><Eye size={14} className="text-text-4" /></button>
+                        <button onClick={() => { setTab("builder"); setPageTitle(page.title); setPageSlug(page.slug); }} className="p-1.5 hover:bg-gray-100 rounded-lg" title="Edit"><Edit size={14} className="text-text-4" /></button>
+                        <button onClick={() => handleDuplicatePage(page)} className="p-1.5 hover:bg-gray-100 rounded-lg" title="Duplicate"><Copy size={14} className="text-text-4" /></button>
+                        <button onClick={() => handleDeletePage(page.id)} className="p-1.5 hover:bg-red-50 rounded-lg" title="Delete"><Trash2 size={14} className="text-red" /></button>
                       </div></td>
                     </tr>
                   ))}
@@ -124,18 +155,18 @@ export default function AdminPagesPage() {
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="text-xs text-text-4 mb-1 block">Page Title</label>
-                    <input type="text" className="w-full h-9 px-3 text-sm border border-gray-200 rounded-lg" placeholder="My Custom Page" />
+                    <input type="text" value={pageTitle} onChange={(e) => setPageTitle(e.target.value)} className="w-full h-9 px-3 text-sm border border-gray-200 rounded-lg" placeholder="My Custom Page" />
                   </div>
                   <div>
                     <label className="text-xs text-text-4 mb-1 block">URL Slug</label>
-                    <input type="text" className="w-full h-9 px-3 text-sm border border-gray-200 rounded-lg font-mono" placeholder="/my-page" />
+                    <input type="text" value={pageSlug} onChange={(e) => setPageSlug(e.target.value)} className="w-full h-9 px-3 text-sm border border-gray-200 rounded-lg font-mono" placeholder="/my-page" />
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button className="px-4 py-2 bg-blue text-white rounded-lg text-sm hover:bg-blue-600">Publish</button>
-                  <button className="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50">Save Draft</button>
-                  <button className="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50 flex items-center gap-1"><Eye size={14} /> Preview</button>
-                  <button className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700 flex items-center gap-1 ml-auto"><Sparkles size={14} /> AI Generate</button>
+                  <button onClick={handlePublish} className="px-4 py-2 bg-blue text-white rounded-lg text-sm hover:bg-blue-600">Publish</button>
+                  <button onClick={handleSaveDraft} className="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50">Save Draft</button>
+                  <button onClick={() => alert("Preview: Your page has " + builderSections.length + " sections.")} className="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50 flex items-center gap-1"><Eye size={14} /> Preview</button>
+                  <button onClick={() => { setBuilderSections([...builderSections, "AI Generated"]); alert("AI section generated and added!"); }} className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700 flex items-center gap-1 ml-auto"><Sparkles size={14} /> AI Generate</button>
                 </div>
               </div>
 
@@ -153,7 +184,7 @@ export default function AdminPagesPage() {
                         <p className="text-sm font-medium">{section}</p>
                         <p className="text-[10px] text-text-4">Click to edit content</p>
                       </div>
-                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex gap-1">
                         <button className="p-1.5 hover:bg-gray-100 rounded-lg"><Edit size={14} className="text-text-4" /></button>
                         <button className="p-1.5 hover:bg-gray-100 rounded-lg"><Copy size={14} className="text-text-4" /></button>
                         <button onClick={() => setBuilderSections(builderSections.filter((_, j) => j !== i))} className="p-1.5 hover:bg-red-50 rounded-lg"><Trash2 size={14} className="text-red" /></button>

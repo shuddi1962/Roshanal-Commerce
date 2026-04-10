@@ -28,15 +28,29 @@ const statusColors: Record<string, string> = {
 export default function AdminQuotesPage() {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [quotes, setQuotes] = useState(demoQuotes);
+  const [viewQuote, setViewQuote] = useState<string | null>(null);
+  const [editQuote, setEditQuote] = useState<string | null>(null);
 
-  const filtered = demoQuotes.filter((q) => {
+  const filtered = quotes.filter((q) => {
     if (filter !== "all" && q.status !== filter) return false;
     if (search && !q.customer.toLowerCase().includes(search.toLowerCase()) && !q.id.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
 
-  const totalPipeline = demoQuotes.filter((q) => ["sent", "negotiating"].includes(q.status)).reduce((a, q) => a + q.total, 0);
-  const totalWon = demoQuotes.filter((q) => q.status === "accepted").reduce((a, q) => a + q.total, 0);
+  const totalPipeline = quotes.filter((q) => ["sent", "negotiating"].includes(q.status)).reduce((a, q) => a + q.total, 0);
+  const totalWon = quotes.filter((q) => q.status === "accepted").reduce((a, q) => a + q.total, 0);
+
+  const handleDelete = (id: string) => {
+    if (confirm(`Delete quote ${id}? This action cannot be undone.`)) {
+      setQuotes((prev) => prev.filter((q) => q.id !== id));
+    }
+  };
+
+  const handleSend = (id: string) => {
+    setQuotes((prev) => prev.map((q) => q.id === id ? { ...q, status: "sent" } : q));
+    alert(`Quote ${id} has been sent to the customer.`);
+  };
 
   return (
     <AdminShell title="Quotes & Proposals" subtitle="Manage B2B quotes and proposals">
@@ -87,14 +101,53 @@ export default function AdminQuotesPage() {
               </div>
               <p className="text-sm text-text-3 mb-2">{quote.items}</p>
               <p className="text-xs text-text-4 italic mb-3">{quote.notes}</p>
+
+              {viewQuote === quote.id && (
+                <div className="mb-3 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
+                  <h5 className="text-xs font-semibold text-text-1 uppercase">Quote Details</h5>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div><span className="text-text-4">Customer:</span> <span className="font-medium">{quote.customer}</span></div>
+                    <div><span className="text-text-4">Contact:</span> <span className="font-medium">{quote.contact}</span></div>
+                    <div><span className="text-text-4">Email:</span> <span className="font-medium">{quote.email}</span></div>
+                    <div><span className="text-text-4">Status:</span> <span className="font-medium capitalize">{quote.status}</span></div>
+                    <div><span className="text-text-4">Created:</span> <span className="font-medium">{quote.date}</span></div>
+                    <div><span className="text-text-4">Valid Until:</span> <span className="font-medium">{quote.validUntil}</span></div>
+                  </div>
+                  <div><span className="text-text-4 text-xs">Items:</span> <p className="text-xs font-medium mt-1">{quote.items}</p></div>
+                </div>
+              )}
+
+              {editQuote === quote.id && (
+                <div className="mb-3 p-4 bg-blue/5 rounded-lg border border-blue/20 space-y-3">
+                  <h5 className="text-xs font-semibold text-text-1 uppercase">Edit Quote</h5>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-[10px] text-text-4 block mb-1">Status</label>
+                      <select defaultValue={quote.status} onChange={(e) => setQuotes((prev) => prev.map((q) => q.id === quote.id ? { ...q, status: e.target.value } : q))} className="w-full h-8 px-2 text-xs border border-gray-200 rounded-lg bg-white">
+                        <option value="draft">Draft</option>
+                        <option value="sent">Sent</option>
+                        <option value="negotiating">Negotiating</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-text-4 block mb-1">Total (₦)</label>
+                      <input type="number" defaultValue={quote.total} onChange={(e) => setQuotes((prev) => prev.map((q) => q.id === quote.id ? { ...q, total: Number(e.target.value) } : q))} className="w-full h-8 px-2 text-xs border border-gray-200 rounded-lg" />
+                    </div>
+                  </div>
+                  <button onClick={() => { setEditQuote(null); alert("Quote updated successfully!"); }} className="px-3 py-1.5 bg-blue text-white text-xs rounded-lg hover:bg-blue-600">Save Changes</button>
+                </div>
+              )}
+
               <div className="flex items-center justify-between">
                 <span className="text-xs text-text-4">Created {quote.date}</span>
                 <div className="flex items-center gap-1">
-                  <button className="p-1.5 hover:bg-gray-100 rounded-lg" title="View"><Eye size={14} className="text-text-4" /></button>
-                  <button className="p-1.5 hover:bg-gray-100 rounded-lg" title="Edit"><Edit size={14} className="text-text-4" /></button>
-                  <button className="p-1.5 hover:bg-blue-50 rounded-lg" title="Send"><Send size={14} className="text-blue" /></button>
-                  <button className="p-1.5 hover:bg-gray-100 rounded-lg" title="Download PDF"><Download size={14} className="text-text-4" /></button>
-                  <button className="p-1.5 hover:bg-red-50 rounded-lg" title="Delete"><Trash2 size={14} className="text-red" /></button>
+                  <button onClick={() => setViewQuote(viewQuote === quote.id ? null : quote.id)} className="p-1.5 hover:bg-gray-100 rounded-lg" title="View"><Eye size={14} className="text-text-4" /></button>
+                  <button onClick={() => setEditQuote(editQuote === quote.id ? null : quote.id)} className="p-1.5 hover:bg-gray-100 rounded-lg" title="Edit"><Edit size={14} className="text-text-4" /></button>
+                  <button onClick={() => handleSend(quote.id)} className="p-1.5 hover:bg-blue-50 rounded-lg" title="Send"><Send size={14} className="text-blue" /></button>
+                  <button onClick={() => alert(`Downloading PDF for ${quote.id}...`)} className="p-1.5 hover:bg-gray-100 rounded-lg" title="Download PDF"><Download size={14} className="text-text-4" /></button>
+                  <button onClick={() => handleDelete(quote.id)} className="p-1.5 hover:bg-red-50 rounded-lg" title="Delete"><Trash2 size={14} className="text-red" /></button>
                 </div>
               </div>
             </div>

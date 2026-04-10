@@ -56,8 +56,31 @@ const defaultMenus: Record<string, MenuItem[]> = {
 
 export default function AdminMenuPage() {
   const [activeMenu, setActiveMenu] = useState<"main" | "footer" | "mobile">("main");
-  const [items] = useState(defaultMenus);
+  const [items, setItems] = useState(defaultMenus);
   const [newItem, setNewItem] = useState({ label: "", url: "" });
+
+  const addMenuItem = () => {
+    if (!newItem.label || !newItem.url) { alert("Please fill in both label and URL."); return; }
+    const id = `new-${Date.now()}`;
+    setItems((prev) => ({
+      ...prev,
+      [activeMenu]: [...prev[activeMenu], { id, label: newItem.label, url: newItem.url, children: [] }],
+    }));
+    setNewItem({ label: "", url: "" });
+  };
+
+  const deleteMenuItem = (id: string) => {
+    if (!confirm("Delete this menu item?")) return;
+    const removeItem = (list: MenuItem[]): MenuItem[] =>
+      list.filter((i) => i.id !== id).map((i) => ({ ...i, children: removeItem(i.children) }));
+    setItems((prev) => ({ ...prev, [activeMenu]: removeItem(prev[activeMenu]) }));
+  };
+
+  const resetMenu = () => {
+    if (confirm("Reset menu to default?")) setItems(defaultMenus);
+  };
+
+  const saveMenu = () => alert("Menu saved successfully!");
 
   const renderMenuItem = (item: MenuItem, depth: number = 0) => (
     <div key={item.id}>
@@ -70,9 +93,9 @@ export default function AdminMenuPage() {
           <span className="text-sm font-medium">{item.label}</span>
           <span className="text-xs text-text-4 ml-2">{item.url}</span>
         </div>
-        <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="p-1 hover:bg-gray-100 rounded"><Edit size={12} className="text-text-4" /></button>
-          <button className="p-1 hover:bg-red-50 rounded"><Trash2 size={12} className="text-red" /></button>
+        <div className="flex gap-0.5">
+          <button onClick={() => alert(`Edit: ${item.label}`)} className="p-1 hover:bg-gray-100 rounded"><Edit size={12} className="text-text-4" /></button>
+          <button onClick={() => deleteMenuItem(item.id)} className="p-1 hover:bg-red-50 rounded"><Trash2 size={12} className="text-red" /></button>
         </div>
       </div>
       {item.children.length > 0 && (
@@ -108,7 +131,7 @@ export default function AdminMenuPage() {
                 <label className="text-xs text-text-4 mb-1 block">URL</label>
                 <input type="text" value={newItem.url} onChange={(e) => setNewItem({ ...newItem, url: e.target.value })} className="w-full h-9 px-3 text-sm border border-gray-200 rounded-lg font-mono" placeholder="/page-url" />
               </div>
-              <button className="w-full h-9 bg-blue text-white rounded-lg text-sm hover:bg-blue-600 flex items-center justify-center gap-2">
+              <button onClick={addMenuItem} className="w-full h-9 bg-blue text-white rounded-lg text-sm hover:bg-blue-600 flex items-center justify-center gap-2">
                 <Plus size={14} /> Add to Menu
               </button>
             </div>
@@ -130,8 +153,8 @@ export default function AdminMenuPage() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-sm capitalize">{activeMenu} Menu Structure</h3>
               <div className="flex gap-2">
-                <button className="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-50 flex items-center gap-1"><Undo size={12} /> Reset</button>
-                <button className="px-3 py-1.5 text-xs bg-blue text-white rounded-lg hover:bg-blue-600 flex items-center gap-1"><Save size={12} /> Save Menu</button>
+                <button onClick={resetMenu} className="px-3 py-1.5 text-xs border border-gray-200 rounded-lg hover:bg-gray-50 flex items-center gap-1"><Undo size={12} /> Reset</button>
+                <button onClick={saveMenu} className="px-3 py-1.5 text-xs bg-blue text-white rounded-lg hover:bg-blue-600 flex items-center gap-1"><Save size={12} /> Save Menu</button>
               </div>
             </div>
             <div className="space-y-1">
