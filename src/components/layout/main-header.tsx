@@ -16,7 +16,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function MainHeader() {
-  const { getItemCount, getTotal, toggleCart } = useCartStore();
+  const { getItemCount, getTotal } = useCartStore();
   const { compareItems, wishlistItems } = useUIStore();
   const { formatPrice } = useCurrencyStore();
   const [searchQuery, setSearchQuery] = useState("");
@@ -120,8 +120,8 @@ export default function MainHeader() {
             )}
           </Link>
 
-          <button
-            onClick={toggleCart}
+          <Link
+            href="/cart"
             className="flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-lg hover:bg-gray-50 transition-colors group relative"
           >
             <ShoppingCart size={20} className="text-text-3 group-hover:text-blue transition-colors" />
@@ -133,7 +133,7 @@ export default function MainHeader() {
                 {getItemCount()}
               </span>
             )}
-          </button>
+          </Link>
 
           <Link
             href="/account"

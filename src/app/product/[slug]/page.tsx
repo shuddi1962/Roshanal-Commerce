@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Star,
@@ -48,6 +49,7 @@ const demoQA = [
 
 export default function ProductDetailPage({ params }: { params: { slug: string } }) {
   const product = products.find((p) => p.slug === params.slug) || products[0];
+  const router = useRouter();
   const { addItem } = useCartStore();
   const { toggleWishlist, wishlistItems, toggleCompare } = useUIStore();
   const { formatPrice, currency } = useCurrencyStore();
@@ -317,7 +319,15 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
             </div>
 
             {/* Buy Now */}
-            <Button variant="outline" className="w-full h-11 font-syne font-bold" disabled={totalStock === 0}>
+            <Button
+              variant="outline"
+              className="w-full h-11 font-syne font-bold"
+              disabled={totalStock === 0}
+              onClick={() => {
+                addItem(product, quantity, undefined, selectedBranch);
+                router.push("/checkout");
+              }}
+            >
               <Zap size={16} className="mr-2" /> Buy Now
             </Button>
 
