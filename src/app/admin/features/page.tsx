@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import AdminShell from "@/components/admin/admin-shell";
-import { ToggleLeft, ToggleRight, Search, Save } from "lucide-react";
+import { ToggleLeft, ToggleRight, Search, Save, Loader2 } from "lucide-react";
+import { insforge } from "@/lib/insforge";
 
 const defaultFeatures = [
   { id: "multi-currency", name: "Multi-Currency Support", description: "Allow customers to shop in different currencies", category: "Commerce", enabled: true },
@@ -35,6 +36,39 @@ export default function AdminFeaturesPage() {
   const [features, setFeatures] = useState(defaultFeatures);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
+  const [saving, setSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  const loadFeatures = useCallback(async () => {
+    try {
+      const { data } = await insforge.database.from("settings").select("value").eq("key", "feature_flags").limit(1);
+      if (data && data.length > 0 && data[0].value) {
+        const saved = data[0].value as Record<string, boolean>;
+        setFeatures((prev) => prev.map((f) => ({ ...f, enabled: saved[f.id] !== undefined ? saved[f.id] : f.enabled })));
+      }
+    } catch { /* use defaults */ }
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => { loadFeatures(); }, [loadFeatures]);
+
+  const saveFeatures = async () => {
+    setSaving(true);
+    try {
+      const value = Object.fromEntries(features.map((f) => [f.id, f.enabled]));
+      const { data: existing } = await insforge.database.from("settings").select("key").eq("key", "feature_flags").limit(1);
+      if (existing && existing.length > 0) {
+        await insforge.database.from("settings").update({ value, updated_at: new Date().toISOString() }).eq("key", "feature_flags");
+      } else {
+        await insforge.database.from("settings").insert([{ key: "feature_flags", value }]);
+      }
+      alert("Feature flags saved!");
+    } catch (err) {
+      alert("Error saving: " + (err instanceof Error ? err.message : "Unknown"));
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const categories = ["all", ...Array.from(new Set(features.map((f) => f.category)))];
 
@@ -59,8 +93,8 @@ export default function AdminFeaturesPage() {
             </div>
             <span className="text-sm text-text-3"><span className="font-semibold text-text-1">{features.filter((f) => f.enabled).length}</span> of {features.length} enabled</span>
           </div>
-          <button onClick={() => alert("Feature flags saved!")} className="flex items-center gap-2 px-4 py-2 bg-blue text-white rounded-lg text-sm hover:bg-blue-600">
-            <Save size={16} /> Save Changes
+          <button onClick={saveFeatures} disabled={saving} className="flex items-center gap-2 px-4 py-2 bg-blue text-white rounded-lg text-sm hover:bg-blue-600 disabled:opacity-50">
+            {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} {saving ? "Saving..." : "Save Changes"}
           </button>
         </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ShoppingCart,
@@ -36,11 +36,14 @@ export default function CartPage() {
   const { items, removeItem, updateQuantity, clearCart, getTotal, getItemCount } = useCartStore();
   const { formatPrice, currency } = useCurrencyStore();
 
+  const [mounted, setMounted] = useState(false);
   const [couponCode, setCouponCode] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [couponError, setCouponError] = useState("");
   const [giftWrap, setGiftWrap] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const subtotal = getTotal();
   const giftWrapFee = giftWrap ? 2500 : 0;
@@ -66,6 +69,14 @@ export default function CartPage() {
   // Upsell products (items not in cart)
   const cartProductIds = items.map((i) => i.product.id);
   const upsellProducts = products.filter((p) => !cartProductIds.includes(p.id) && p.featured).slice(0, 4);
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-off-white flex items-center justify-center">
+        <div className="w-8 h-8 border-3 border-blue/20 border-t-blue rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (

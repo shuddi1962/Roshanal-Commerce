@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -69,6 +69,9 @@ export default function CheckoutPage() {
   const { items, getTotal, getItemCount, clearCart } = useCartStore();
   const { formatPrice } = useCurrencyStore();
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedShipping, setSelectedShipping] = useState("standard");
   const [selectedPayment, setSelectedPayment] = useState("card");
@@ -84,6 +87,14 @@ export default function CheckoutPage() {
 
   const goNext = () => setCurrentStep(Math.min(7, currentStep + 1));
   const goBack = () => setCurrentStep(Math.max(1, currentStep - 1));
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-off-white flex items-center justify-center">
+        <div className="w-8 h-8 border-3 border-blue/20 border-t-blue rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (items.length === 0 && currentStep < 7) {
     return (
