@@ -1,19 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
   Star, ThumbsUp, Trash2, CheckCircle2, XCircle,
-  MessageSquare, Search, Image as ImageIcon, Flag,
+  MessageSquare, Search, Image as ImageIcon, Flag, X, Send,
 } from "lucide-react";
+import { insforge } from "@/lib/insforge";
 
-const demoReviews = [
-  { id: 1, product: "Hikvision 4CH DVR Kit", customer: "Chidi Okafor", email: "chidi@email.com", rating: 5, title: "Excellent quality!", comment: "Very clear picture quality, easy to install. Highly recommended for home security.", date: "2024-03-15", status: "approved", helpful: 12, images: 2, verified: true },
-  { id: 2, product: "Yamaha 40HP Outboard", customer: "Emeka Nwosu", email: "emeka@email.com", rating: 4, title: "Good engine", comment: "Reliable performance. Been using it for 3 months now with no issues.", date: "2024-03-14", status: "approved", helpful: 8, images: 0, verified: true },
-  { id: 3, product: "Fire Extinguisher 9kg", customer: "Amina Bello", email: "amina@email.com", rating: 2, title: "Arrived damaged", comment: "The extinguisher had a dent on arrival. Packaging was poor.", date: "2024-03-13", status: "pending", helpful: 3, images: 1, verified: false },
-  { id: 4, product: "Access Control System", customer: "Tunde Adebayo", email: "tunde@email.com", rating: 5, title: "Professional grade", comment: "Works perfectly for our office building. Support team helped with setup.", date: "2024-03-12", status: "approved", helpful: 15, images: 3, verified: true },
-  { id: 5, product: "Life Jacket Adult", customer: "Grace Eze", email: "grace@email.com", rating: 1, title: "Wrong size", comment: "Ordered XL but received M. Very disappointed.", date: "2024-03-11", status: "flagged", helpful: 1, images: 0, verified: true },
-  { id: 6, product: "Kitchen Hood 90cm", customer: "Ibrahim Musa", email: "ibrahim@email.com", rating: 3, title: "Decent but noisy", comment: "Extraction works well but the motor is quite loud on high speed.", date: "2024-03-10", status: "pending", helpful: 5, images: 0, verified: false },
+interface Review {
+  id: string;
+  product: string;
+  customer: string;
+  email: string;
+  rating: number;
+  title: string;
+  comment: string;
+  date: string;
+  status: string;
+  helpful: number;
+  images: number;
+  verified: boolean;
+  reply?: string;
+}
+
+const seedReviews: Omit<Review, "id">[] = [
+  { product: "Hikvision 4CH DVR Kit", customer: "Chidi Okafor", email: "chidi@email.com", rating: 5, title: "Excellent quality!", comment: "Very clear picture quality, easy to install. Highly recommended for home security.", date: "2024-03-15", status: "approved", helpful: 12, images: 2, verified: true },
+  { product: "Yamaha 40HP Outboard", customer: "Emeka Nwosu", email: "emeka@email.com", rating: 4, title: "Good engine", comment: "Reliable performance. Been using it for 3 months now with no issues.", date: "2024-03-14", status: "approved", helpful: 8, images: 0, verified: true },
+  { product: "Fire Extinguisher 9kg", customer: "Amina Bello", email: "amina@email.com", rating: 2, title: "Arrived damaged", comment: "The extinguisher had a dent on arrival. Packaging was poor.", date: "2024-03-13", status: "pending", helpful: 3, images: 1, verified: false },
+  { product: "Access Control System", customer: "Tunde Adebayo", email: "tunde@email.com", rating: 5, title: "Professional grade", comment: "Works perfectly for our office building. Support team helped with setup.", date: "2024-03-12", status: "approved", helpful: 15, images: 3, verified: true },
+  { product: "Life Jacket Adult", customer: "Grace Eze", email: "grace@email.com", rating: 1, title: "Wrong size", comment: "Ordered XL but received M. Very disappointed.", date: "2024-03-11", status: "flagged", helpful: 1, images: 0, verified: true },
+  { product: "Kitchen Hood 90cm", customer: "Ibrahim Musa", email: "ibrahim@email.com", rating: 3, title: "Decent but noisy", comment: "Extraction works well but the motor is quite loud on high speed.", date: "2024-03-10", status: "pending", helpful: 5, images: 0, verified: false },
 ];
 
 const statusColors: Record<string, string> = {
@@ -26,7 +43,53 @@ const statusColors: Record<string, string> = {
 export default function AdminReviewsPage() {
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
-  const [reviews, setReviews] = useState(demoReviews);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [replyModal, setReplyModal] = useState<Review | null>(null);
+  const [replyText, setReplyText] = useState("");
+  const [viewReview, setViewReview] = useState<Review | null>(null);
+
+  useEffect(() => { loadReviews(); }, []);
+
+  const loadReviews = async () => {
+    try {
+      const { data, error } = await insforge.database.from("reviews").select("*").order("date", { ascending: false });
+      if (error) throw error;
+      if (data && data.length > 0) { setReviews(data); }
+      else {
+        for (const r of seedReviews) await insforge.database.from("reviews").insert(r);
+        const { data: seeded } = await insforge.database.from("reviews").select("*");
+        if (seeded) setReviews(seeded);
+      }
+    } catch {
+      setReviews(seedReviews.map((r, i) => ({ ...r, id: String(i + 1) })));
+    } finally { setLoading(false); }
+  };
+
+  const updateStatus = async (id: string, status: string) => {
+    try {
+      await insforge.database.from("reviews").update({ status }).eq("id", id);
+      setReviews((prev) => prev.map((r) => r.id === id ? { ...r, status } : r));
+    } catch (err) { console.error(err); }
+  };
+
+  const deleteReview = async (id: string) => {
+    if (!confirm("Delete this review permanently?")) return;
+    try {
+      await insforge.database.from("reviews").delete().eq("id", id);
+      setReviews((prev) => prev.filter((r) => r.id !== id));
+    } catch (err) { console.error(err); }
+  };
+
+  const submitReply = async () => {
+    if (!replyModal || !replyText.trim()) return;
+    try {
+      await insforge.database.from("reviews").update({ reply: replyText, status: "approved" }).eq("id", replyModal.id);
+      setReviews((prev) => prev.map((r) => r.id === replyModal.id ? { ...r, reply: replyText, status: "approved" } : r));
+      setReplyModal(null);
+      setReplyText("");
+    } catch (err) { console.error(err); }
+  };
 
   const filtered = reviews.filter((r) => {
     if (filter !== "all" && r.status !== filter) return false;
@@ -34,19 +97,11 @@ export default function AdminReviewsPage() {
     return true;
   });
 
-  const handleAction = (id: number, action: string) => {
-    if (action === "approve") setReviews((prev) => prev.map((r) => r.id === id ? { ...r, status: "approved" } : r));
-    else if (action === "reject") setReviews((prev) => prev.map((r) => r.id === id ? { ...r, status: "rejected" } : r));
-    else if (action === "flag") setReviews((prev) => prev.map((r) => r.id === id ? { ...r, status: "flagged" } : r));
-    else if (action === "delete") { if (confirm("Delete this review?")) setReviews((prev) => prev.filter((r) => r.id !== id)); }
-    else if (action === "reply") alert("Reply feature: Compose your response to this review.");
-  };
-
-  const avgRating = (reviews.reduce((a, b) => a + b.rating, 0) / reviews.length).toFixed(1);
+  const avgRating = reviews.length ? (reviews.reduce((a, b) => a + b.rating, 0) / reviews.length).toFixed(1) : "0";
   const ratingDist = [5, 4, 3, 2, 1].map((r) => ({
     stars: r,
     count: reviews.filter((rev) => rev.rating === r).length,
-    pct: Math.round((reviews.filter((rev) => rev.rating === r).length / reviews.length) * 100),
+    pct: reviews.length ? Math.round((reviews.filter((rev) => rev.rating === r).length / reviews.length) * 100) : 0,
   }));
 
   return (
@@ -56,7 +111,7 @@ export default function AdminReviewsPage() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <p className="text-xs text-text-4 mb-1">Total Reviews</p>
-            <p className="text-2xl font-bold text-text-1">{demoReviews.length}</p>
+            <p className="text-2xl font-bold text-text-1">{reviews.length}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <p className="text-xs text-text-4 mb-1">Average Rating</p>
@@ -67,15 +122,15 @@ export default function AdminReviewsPage() {
           </div>
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <p className="text-xs text-text-4 mb-1">Pending</p>
-            <p className="text-2xl font-bold text-yellow-600">{demoReviews.filter((r) => r.status === "pending").length}</p>
+            <p className="text-2xl font-bold text-yellow-600">{reviews.filter((r) => r.status === "pending").length}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <p className="text-xs text-text-4 mb-1">With Photos</p>
-            <p className="text-2xl font-bold text-blue">{demoReviews.filter((r) => r.images > 0).length}</p>
+            <p className="text-2xl font-bold text-blue">{reviews.filter((r) => r.images > 0).length}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <p className="text-xs text-text-4 mb-1">Flagged</p>
-            <p className="text-2xl font-bold text-red">{demoReviews.filter((r) => r.status === "flagged").length}</p>
+            <p className="text-2xl font-bold text-red">{reviews.filter((r) => r.status === "flagged").length}</p>
           </div>
         </div>
 
@@ -98,82 +153,113 @@ export default function AdminReviewsPage() {
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px] max-w-sm">
-            <input
-              type="text"
-              placeholder="Search reviews..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full h-10 pl-10 pr-4 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-blue"
-            />
+            <input type="text" placeholder="Search reviews..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full h-10 pl-10 pr-4 text-sm rounded-lg border border-gray-200 focus:outline-none focus:border-blue" />
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-4" />
           </div>
-          {["all", "pending", "approved", "flagged"].map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`px-4 py-2 text-sm rounded-lg border transition-colors capitalize ${
-                filter === f ? "bg-blue text-white border-blue" : "bg-white border-gray-200 text-text-3 hover:border-blue"
-              }`}
-            >
+          {["all", "pending", "approved", "flagged", "rejected"].map((f) => (
+            <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 text-sm rounded-lg border transition-colors capitalize ${filter === f ? "bg-blue text-white border-blue" : "bg-white border-gray-200 text-text-3 hover:border-blue"}`}>
               {f}
             </button>
           ))}
         </div>
 
         {/* Reviews List */}
-        <div className="space-y-3">
-          {filtered.map((review) => (
-            <div key={review.id} className="bg-white rounded-xl p-5 border border-gray-100">
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className="font-semibold text-sm text-text-1">{review.title}</h4>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusColors[review.status]}`}>
-                      {review.status}
-                    </span>
-                    {review.verified && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue/10 text-blue font-medium">Verified</span>
-                    )}
+        {loading ? (
+          <div className="text-center p-12 text-text-4 text-sm">Loading reviews...</div>
+        ) : (
+          <div className="space-y-3">
+            {filtered.map((review) => (
+              <div key={review.id} className="bg-white rounded-xl p-5 border border-gray-100">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-semibold text-sm text-text-1">{review.title}</h4>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusColors[review.status] || "bg-gray-100 text-gray-600"}`}>
+                        {review.status}
+                      </span>
+                      {review.verified && (
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue/10 text-blue font-medium">Verified</span>
+                      )}
+                    </div>
+                    <p className="text-xs text-text-4">
+                      by <span className="font-medium text-text-2">{review.customer}</span> on{" "}
+                      <span className="font-medium">{review.product}</span> · {review.date}
+                    </p>
                   </div>
-                  <p className="text-xs text-text-4">
-                    by <span className="font-medium text-text-2">{review.customer}</span> on{" "}
-                    <span className="font-medium">{review.product}</span> · {review.date}
-                  </p>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} size={14} className={i < review.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-200"} />
+                    ))}
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
+                <p className="text-sm text-text-3 mb-2">{review.comment}</p>
+                {review.reply && (
+                  <div className="bg-blue/5 border border-blue/10 rounded-lg p-3 mb-3">
+                    <p className="text-[10px] text-blue font-semibold mb-1">Store Reply</p>
+                    <p className="text-xs text-text-2">{review.reply}</p>
+                  </div>
+                )}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4 text-xs text-text-4">
+                    <span className="flex items-center gap-1"><ThumbsUp size={12} /> {review.helpful} helpful</span>
+                    {review.images > 0 && <span className="flex items-center gap-1"><ImageIcon size={12} /> {review.images} photos</span>}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button onClick={() => updateStatus(review.id, "approved")} className="p-1.5 hover:bg-green-50 rounded-lg transition-colors" title="Approve">
+                      <CheckCircle2 size={16} className="text-green-600" />
+                    </button>
+                    <button onClick={() => updateStatus(review.id, "rejected")} className="p-1.5 hover:bg-red-50 rounded-lg transition-colors" title="Reject">
+                      <XCircle size={16} className="text-red" />
+                    </button>
+                    <button onClick={() => updateStatus(review.id, "flagged")} className="p-1.5 hover:bg-yellow-50 rounded-lg transition-colors" title="Flag">
+                      <Flag size={16} className="text-yellow-600" />
+                    </button>
+                    <button onClick={() => { setReplyModal(review); setReplyText(review.reply || ""); }} className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors" title="Reply">
+                      <MessageSquare size={16} className="text-blue" />
+                    </button>
+                    <button onClick={() => deleteReview(review.id)} className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors" title="Delete">
+                      <Trash2 size={16} className="text-text-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {filtered.length === 0 && <div className="text-center p-8 text-text-4 text-sm">No reviews found.</div>}
+          </div>
+        )}
+      </div>
+
+      {/* Reply Modal */}
+      {replyModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={() => setReplyModal(null)}>
+          <div className="bg-white rounded-2xl w-full max-w-[500px]" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-5 border-b border-gray-100">
+              <h2 className="font-syne font-bold text-lg">Reply to Review</h2>
+              <button onClick={() => setReplyModal(null)} className="p-2 rounded-lg hover:bg-gray-50 text-text-4"><X size={16} /></button>
+            </div>
+            <div className="p-5">
+              <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                <div className="flex items-center gap-1 mb-1">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} size={14} className={i < review.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-200"} />
+                    <Star key={i} size={12} className={i < replyModal.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-200"} />
                   ))}
                 </div>
+                <p className="text-xs font-semibold text-text-1">{replyModal.title}</p>
+                <p className="text-xs text-text-3 mt-1">{replyModal.comment}</p>
+                <p className="text-[10px] text-text-4 mt-2">— {replyModal.customer} on {replyModal.product}</p>
               </div>
-              <p className="text-sm text-text-3 mb-3">{review.comment}</p>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4 text-xs text-text-4">
-                  <span className="flex items-center gap-1"><ThumbsUp size={12} /> {review.helpful} helpful</span>
-                  {review.images > 0 && <span className="flex items-center gap-1"><ImageIcon size={12} /> {review.images} photos</span>}
-                </div>
-                <div className="flex items-center gap-1">
-                  <button onClick={() => handleAction(review.id, "approve")} className="p-1.5 hover:bg-green-50 rounded-lg transition-colors" title="Approve">
-                    <CheckCircle2 size={16} className="text-green-600" />
-                  </button>
-                  <button onClick={() => handleAction(review.id, "reject")} className="p-1.5 hover:bg-red-50 rounded-lg transition-colors" title="Reject">
-                    <XCircle size={16} className="text-red" />
-                  </button>
-                  <button onClick={() => handleAction(review.id, "flag")} className="p-1.5 hover:bg-yellow-50 rounded-lg transition-colors" title="Flag">
-                    <Flag size={16} className="text-yellow-600" />
-                  </button>
-                  <button onClick={() => handleAction(review.id, "reply")} className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors" title="Reply">
-                    <MessageSquare size={16} className="text-blue" />
-                  </button>
-                  <button onClick={() => handleAction(review.id, "delete")} className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors" title="Delete">
-                    <Trash2 size={16} className="text-text-4" />
-                  </button>
-                </div>
-              </div>
+              <label className="text-xs font-semibold text-text-2 mb-1 block">Your Reply</label>
+              <textarea value={replyText} onChange={(e) => setReplyText(e.target.value)} rows={4} className="w-full p-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-blue resize-none" placeholder="Write your response..." />
             </div>
-          ))}
+            <div className="flex gap-2 p-5 border-t border-gray-100">
+              <button onClick={() => setReplyModal(null)} className="flex-1 h-10 rounded-lg border border-gray-200 text-sm text-text-3 hover:bg-gray-50">Cancel</button>
+              <button onClick={submitReply} disabled={!replyText.trim()} className="flex-1 h-10 rounded-lg bg-blue text-white text-sm font-semibold hover:bg-blue-600 disabled:opacity-40 flex items-center justify-center gap-1.5">
+                <Send size={14} /> Send Reply
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </AdminShell>
   );
 }

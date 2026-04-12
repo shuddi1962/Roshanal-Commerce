@@ -71,7 +71,7 @@ const socialLinks = [
   { icon: Play, url: "#", label: "YouTube" },
 ];
 
-const paymentLogos = ["Visa", "Mastercard", "Paystack", "Flutterwave", "Stripe", "Bitcoin"];
+const paymentLogos = ["Visa", "Mastercard", "Verve", "Paystack", "Flutterwave", "Stripe", "Bitcoin", "USDT", "Bank Transfer"];
 
 export default function Footer() {
   const [email, setEmail] = useState("");

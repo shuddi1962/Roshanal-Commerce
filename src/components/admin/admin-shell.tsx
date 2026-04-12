@@ -37,6 +37,15 @@ import {
   BarChart3,
   Navigation,
   Anchor,
+  FolderTree,
+  Tag,
+  Award,
+  SlidersHorizontal,
+  ImageIcon,
+  MapPin,
+  UserPlus,
+  Warehouse,
+  PenTool,
 } from "lucide-react";
 
 const sidebarSections = [
@@ -45,6 +54,10 @@ const sidebarSections = [
     items: [
       { label: "Dashboard", icon: LayoutDashboard, href: "/admin" },
       { label: "Products", icon: Package, href: "/admin/products" },
+      { label: "Categories", icon: FolderTree, href: "/admin/categories" },
+      { label: "Tags", icon: Tag, href: "/admin/tags" },
+      { label: "Brands", icon: Award, href: "/admin/brands" },
+      { label: "Variations", icon: SlidersHorizontal, href: "/admin/variations" },
       { label: "Orders", icon: ShoppingCart, href: "/admin/orders" },
       { label: "Customers", icon: Users, href: "/admin/customers" },
       { label: "Inventory", icon: Layers, href: "/admin/inventory" },
@@ -66,6 +79,7 @@ const sidebarSections = [
     items: [
       { label: "Campaigns", icon: Megaphone, href: "/admin/marketing" },
       { label: "Banners", icon: Image, href: "/admin/banners" },
+      { label: "Popups & Ads", icon: Megaphone, href: "/admin/popups" },
       { label: "SEO Tools", icon: Search, href: "/admin/seo" },
     ],
   },
@@ -85,6 +99,8 @@ const sidebarSections = [
     title: "Operations",
     items: [
       { label: "Delivery", icon: Truck, href: "/admin/delivery" },
+      { label: "Shipping Zones", icon: MapPin, href: "/admin/shipping" },
+      { label: "Locations", icon: Warehouse, href: "/admin/locations" },
       { label: "Warranty", icon: Shield, href: "/admin/warranty" },
       { label: "Field Team", icon: Wrench, href: "/admin/field-team" },
     ],
@@ -99,10 +115,11 @@ const sidebarSections = [
     title: "Content & Design",
     items: [
       { label: "Homepage Builder", icon: Palette, href: "/admin/homepage" },
-      { label: "Page Builder", icon: FileText, href: "/admin/pages" },
+      { label: "Page Editor", icon: PenTool, href: "/admin/page-editor" },
       { label: "Menu Builder", icon: Navigation, href: "/admin/menu" },
       { label: "Banner Builder", icon: Image, href: "/admin/banners/builder" },
       { label: "Footer Builder", icon: Layers, href: "/admin/footer" },
+      { label: "Media Library", icon: ImageIcon, href: "/admin/media" },
     ],
   },
   {
@@ -117,6 +134,7 @@ const sidebarSections = [
     title: "System",
     items: [
       { label: "Settings", icon: Settings, href: "/admin/settings" },
+      { label: "Staff", icon: UserPlus, href: "/admin/staff" },
       { label: "Roles", icon: Shield, href: "/admin/roles" },
       { label: "Analytics", icon: BarChart3, href: "/admin/analytics" },
       { label: "Feature Flags", icon: Plug, href: "/admin/features" },
@@ -164,11 +182,11 @@ export default function AdminShell({ children, title, subtitle }: AdminShellProp
           </Link>
         </div>
 
-        <nav className="flex-1 py-3 overflow-y-auto">
+        <nav className="flex-1 py-1.5 overflow-y-auto">
           {sidebarSections.map((section) => (
-            <div key={section.title} className="mb-1">
+            <div key={section.title} className="mb-0.5">
               {!sidebarCollapsed && (
-                <p className="px-4 py-2 text-[10px] text-white/30 uppercase tracking-wider font-semibold">
+                <p className="px-4 py-1 mt-1 text-[9px] text-white/25 uppercase tracking-wider font-semibold">
                   {section.title}
                 </p>
               )}
@@ -179,14 +197,14 @@ export default function AdminShell({ children, title, subtitle }: AdminShellProp
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-2.5 px-3 py-2 mx-2 rounded-lg text-[13px] transition-colors ${
+                    className={`flex items-center gap-2 px-3 py-[5px] mx-2 rounded-lg text-[12px] transition-colors ${
                       isActive
                         ? "bg-white/10 text-white font-medium"
                         : "text-white/50 hover:bg-white/5 hover:text-white/80"
                     }`}
                     title={sidebarCollapsed ? item.label : undefined}
                   >
-                    <Icon size={16} className="shrink-0" />
+                    <Icon size={14} className="shrink-0" />
                     {!sidebarCollapsed && <span>{item.label}</span>}
                   </Link>
                 );

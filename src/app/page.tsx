@@ -242,6 +242,143 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* KONGA-STYLE PROMO BANNERS */}
+      <section className="py-6">
+        <div className="w-full max-w-[1440px] mx-auto px-4">
+          {/* Row 1: Big left + 2 stacked right */}
+          <div className="grid md:grid-cols-3 gap-3 mb-3">
+            <Link href="/deals" className="md:col-span-2 relative rounded-xl overflow-hidden h-[220px] md:h-[280px] group">
+              <Image
+                src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=900&h=400&fit=crop&q=80"
+                alt="Security Mega Sale"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                unoptimized
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-red-600/90 via-red-600/60 to-transparent" />
+              <div className="relative h-full flex flex-col justify-center p-6 md:p-8">
+                <span className="inline-block bg-yellow-400 text-navy text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider w-fit mb-3">Mega Deal</span>
+                <h3 className="font-bold text-2xl md:text-3xl text-white leading-tight">Up to 50% Off<br />Security Systems</h3>
+                <p className="text-white/70 text-sm mt-2 max-w-[300px]">Premium CCTV cameras, NVRs & complete packages at unbeatable prices.</p>
+                <span className="inline-flex items-center gap-1.5 mt-4 text-sm font-semibold text-yellow-300 group-hover:text-white transition-colors">
+                  Shop Now <ArrowRight size={14} />
+                </span>
+              </div>
+            </Link>
+            <div className="flex flex-col gap-3">
+              <Link href="/category/solar-systems" className="relative rounded-xl overflow-hidden flex-1 min-h-[130px] group">
+                <Image
+                  src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=500&h=300&fit=crop&q=80"
+                  alt="Solar Systems"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-green-900/90 via-green-800/50 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <span className="text-[10px] font-bold text-green-300 uppercase tracking-wider">New Collection</span>
+                  <h4 className="font-bold text-base text-white mt-0.5">Solar Power Systems</h4>
+                  <span className="text-xs text-white/60">From ₦150,000</span>
+                </div>
+              </Link>
+              <Link href="/category/networking" className="relative rounded-xl overflow-hidden flex-1 min-h-[130px] group">
+                <Image
+                  src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500&h=300&fit=crop&q=80"
+                  alt="Networking"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-800/50 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <span className="text-[10px] font-bold text-blue-300 uppercase tracking-wider">Best Sellers</span>
+                  <h4 className="font-bold text-base text-white mt-0.5">Networking Equipment</h4>
+                  <span className="text-xs text-white/60">Routers, Switches & More</span>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Row 2: 4-column deal cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+            <Link href="/category/access-control" className="relative rounded-xl overflow-hidden h-[160px] group">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-purple-900" />
+              <div className="relative h-full flex flex-col justify-between p-4">
+                <div>
+                  <Fingerprint size={24} className="text-purple-200 mb-2" />
+                  <h4 className="font-bold text-sm text-white">Access Control</h4>
+                  <p className="text-[11px] text-white/60 mt-0.5">Biometric & card systems</p>
+                </div>
+                <span className="text-xs font-semibold text-purple-200 group-hover:text-white transition-colors flex items-center gap-1">
+                  Shop Now <ArrowRight size={12} />
+                </span>
+              </div>
+            </Link>
+            <Link href="/category/fire-alarm" className="relative rounded-xl overflow-hidden h-[160px] group">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-red-700" />
+              <div className="relative h-full flex flex-col justify-between p-4">
+                <div>
+                  <Flame size={24} className="text-orange-200 mb-2" />
+                  <h4 className="font-bold text-sm text-white">Fire Alarm Systems</h4>
+                  <p className="text-[11px] text-white/60 mt-0.5">Detection & suppression</p>
+                </div>
+                <span className="text-xs font-semibold text-orange-200 group-hover:text-white transition-colors flex items-center gap-1">
+                  Shop Now <ArrowRight size={12} />
+                </span>
+              </div>
+            </Link>
+            <Link href="/category/kitchen-equipment" className="relative rounded-xl overflow-hidden h-[160px] group">
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-emerald-800" />
+              <div className="relative h-full flex flex-col justify-between p-4">
+                <div>
+                  <ChefHat size={24} className="text-emerald-200 mb-2" />
+                  <h4 className="font-bold text-sm text-white">Kitchen Equipment</h4>
+                  <p className="text-[11px] text-white/60 mt-0.5">Commercial & residential</p>
+                </div>
+                <span className="text-xs font-semibold text-emerald-200 group-hover:text-white transition-colors flex items-center gap-1">
+                  Shop Now <ArrowRight size={12} />
+                </span>
+              </div>
+            </Link>
+            <Link href="/category/boat-engines" className="relative rounded-xl overflow-hidden h-[160px] group">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-blue-800" />
+              <div className="relative h-full flex flex-col justify-between p-4">
+                <div>
+                  <Anchor size={24} className="text-cyan-200 mb-2" />
+                  <h4 className="font-bold text-sm text-white">Marine & Boat Engines</h4>
+                  <p className="text-[11px] text-white/60 mt-0.5">Yamaha, Mercury & more</p>
+                </div>
+                <span className="text-xs font-semibold text-cyan-200 group-hover:text-white transition-colors flex items-center gap-1">
+                  Shop Now <ArrowRight size={12} />
+                </span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Row 3: Wide brand spotlight banner */}
+          <div className="relative rounded-xl overflow-hidden h-[120px] md:h-[140px] group">
+            <Image
+              src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1400&h=300&fit=crop&q=80"
+              alt="Brand Partners"
+              fill
+              className="object-cover"
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-navy/85" />
+            <div className="relative h-full flex items-center justify-between px-6 md:px-10">
+              <div>
+                <span className="text-[10px] font-bold text-blue-300 uppercase tracking-wider">Official Distributor</span>
+                <h3 className="font-bold text-lg md:text-xl text-white mt-1">Hikvision · Dahua · ZKTeco · Yamaha · Honeywell</h3>
+                <p className="text-white/50 text-xs mt-1">Genuine products with manufacturer warranty & local support</p>
+              </div>
+              <Link href="/brands" className="hidden md:inline-flex items-center justify-center rounded-lg text-sm font-semibold h-10 px-6 bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-all shrink-0">
+                View All Brands <ArrowRight size={14} className="ml-2" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* PRODUCT TABS */}
       <section className="py-10 bg-white">
         <div className="w-full max-w-[1440px] mx-auto px-4">

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
   GripVertical, Eye, EyeOff, Settings, ChevronUp, ChevronDown,
   Image, ShoppingBag, Layers, Star, Megaphone, Tag, Truck,
   Zap, Users, MessageCircle, Save, RotateCcw, Monitor, Smartphone,
 } from "lucide-react";
+import { insforge } from "@/lib/insforge";
 
 interface HomepageSection {
   id: string;
@@ -41,6 +42,38 @@ export default function HomepageBuilderPage() {
   const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => { loadLayout(); }, []);
+
+  const loadLayout = async () => {
+    try {
+      const { data } = await insforge.database.from("settings").select("*").eq("key", "homepage_layout");
+      if (data?.[0]?.value) {
+        const saved = data[0].value as { id: string; name: string; enabled: boolean; order: number }[];
+        const restored = saved.map((s) => ({
+          ...s,
+          icon: defaultSections.find((d) => d.id === s.id)?.icon || Image,
+        }));
+        setSections(restored);
+      }
+    } catch (err) {
+      console.error("Failed to load homepage layout:", err);
+    }
+  };
+
+  const saveLayout = async () => {
+    setSaving(true);
+    try {
+      const toSave = sections.map(({ icon, ...rest }) => rest);
+      await insforge.database.from("settings").upsert({ key: "homepage_layout", value: toSave });
+      setHasChanges(false);
+    } catch (err) {
+      console.error("Failed to save layout:", err);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const toggleSection = (id: string) => {
     setSections((prev) => prev.map((s) => s.id === id ? { ...s, enabled: !s.enabled } : s));
@@ -79,33 +112,18 @@ export default function HomepageBuilderPage() {
         </div>
         <div className="flex items-center gap-2">
           <div className="flex bg-white rounded-lg border border-gray-200 p-0.5">
-            <button
-              onClick={() => setPreviewMode("desktop")}
-              className={`p-2 rounded-md transition-colors ${previewMode === "desktop" ? "bg-blue text-white" : "text-text-4"}`}
-            >
+            <button onClick={() => setPreviewMode("desktop")} className={`p-2 rounded-md transition-colors ${previewMode === "desktop" ? "bg-blue text-white" : "text-text-4"}`}>
               <Monitor size={14} />
             </button>
-            <button
-              onClick={() => setPreviewMode("mobile")}
-              className={`p-2 rounded-md transition-colors ${previewMode === "mobile" ? "bg-blue text-white" : "text-text-4"}`}
-            >
+            <button onClick={() => setPreviewMode("mobile")} className={`p-2 rounded-md transition-colors ${previewMode === "mobile" ? "bg-blue text-white" : "text-text-4"}`}>
               <Smartphone size={14} />
             </button>
           </div>
-          <button
-            onClick={() => { setSections(defaultSections); setHasChanges(false); }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-xs text-text-3 hover:bg-gray-50 transition-colors"
-          >
-            <RotateCcw size={14} />
-            Reset
+          <button onClick={() => { setSections(defaultSections); setHasChanges(true); }} className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-xs text-text-3 hover:bg-gray-50 transition-colors">
+            <RotateCcw size={14} /> Reset
           </button>
-          <button
-            disabled={!hasChanges}
-            onClick={() => { setHasChanges(false); alert("Homepage layout saved successfully!"); }}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue text-white text-xs font-semibold hover:bg-blue-600 transition-colors disabled:opacity-40"
-          >
-            <Save size={14} />
-            Save Layout
+          <button disabled={!hasChanges || saving} onClick={saveLayout} className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue text-white text-xs font-semibold hover:bg-blue-600 transition-colors disabled:opacity-40">
+            <Save size={14} /> {saving ? "Saving..." : "Save Layout"}
           </button>
         </div>
       </div>
@@ -116,17 +134,10 @@ export default function HomepageBuilderPage() {
           {sorted.map((section, idx) => {
             const Icon = section.icon;
             return (
-              <div
-                key={section.id}
-                className={`bg-white rounded-xl border transition-colors ${
-                  selectedSection === section.id ? "border-blue shadow-soft" : "border-gray-200"
-                } ${!section.enabled ? "opacity-60" : ""}`}
-              >
+              <div key={section.id} className={`bg-white rounded-xl border transition-colors ${selectedSection === section.id ? "border-blue shadow-soft" : "border-gray-200"} ${!section.enabled ? "opacity-60" : ""}`}>
                 <div className="flex items-center gap-3 px-4 py-3">
                   <GripVertical size={16} className="text-text-4 cursor-grab shrink-0" />
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                    section.enabled ? "bg-blue/10 text-blue" : "bg-gray-100 text-text-4"
-                  }`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${section.enabled ? "bg-blue/10 text-blue" : "bg-gray-100 text-text-4"}`}>
                     <Icon size={16} />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -134,72 +145,44 @@ export default function HomepageBuilderPage() {
                     <p className="text-[10px] text-text-4">Section #{idx + 1}</p>
                   </div>
                   <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => moveSection(section.id, "up")}
-                      disabled={idx === 0}
-                      className="p-1.5 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-colors"
-                    >
+                    <button onClick={() => moveSection(section.id, "up")} disabled={idx === 0} className="p-1.5 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-colors">
                       <ChevronUp size={14} className="text-text-4" />
                     </button>
-                    <button
-                      onClick={() => moveSection(section.id, "down")}
-                      disabled={idx === sorted.length - 1}
-                      className="p-1.5 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-colors"
-                    >
+                    <button onClick={() => moveSection(section.id, "down")} disabled={idx === sorted.length - 1} className="p-1.5 hover:bg-gray-50 rounded-lg disabled:opacity-30 transition-colors">
                       <ChevronDown size={14} className="text-text-4" />
                     </button>
-                    <button
-                      onClick={() => toggleSection(section.id)}
-                      className={`p-1.5 rounded-lg transition-colors ${
-                        section.enabled ? "hover:bg-green-50 text-green-600" : "hover:bg-red/10 text-red"
-                      }`}
-                    >
+                    <button onClick={() => toggleSection(section.id)} className={`p-1.5 rounded-lg transition-colors ${section.enabled ? "hover:bg-green-50 text-green-600" : "hover:bg-red/10 text-red"}`}>
                       {section.enabled ? <Eye size={14} /> : <EyeOff size={14} />}
                     </button>
-                    <button
-                      onClick={() => setSelectedSection(selectedSection === section.id ? null : section.id)}
-                      className="p-1.5 hover:bg-gray-50 rounded-lg transition-colors"
-                    >
+                    <button onClick={() => setSelectedSection(selectedSection === section.id ? null : section.id)} className="p-1.5 hover:bg-gray-50 rounded-lg transition-colors">
                       <Settings size={14} className="text-text-4" />
                     </button>
                   </div>
                 </div>
 
-                {/* Settings Panel */}
                 {selectedSection === section.id && (
                   <div className="px-4 pb-4 pt-2 border-t border-gray-100">
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <label className="text-[10px] text-text-4 font-semibold uppercase tracking-wider">Display Title</label>
-                        <input
-                          type="text"
-                          defaultValue={section.name}
-                          className="mt-1 w-full h-9 px-3 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-blue"
-                        />
+                        <input type="text" defaultValue={section.name} onChange={(e) => { setSections((prev) => prev.map((s) => s.id === section.id ? { ...s, name: e.target.value } : s)); setHasChanges(true); }} className="mt-1 w-full h-9 px-3 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-blue" />
                       </div>
                       <div>
                         <label className="text-[10px] text-text-4 font-semibold uppercase tracking-wider">Products to Show</label>
-                        <select className="mt-1 w-full h-9 px-3 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-blue bg-white">
-                          <option>4</option>
-                          <option>6</option>
-                          <option>8</option>
-                          <option>12</option>
+                        <select onChange={() => setHasChanges(true)} className="mt-1 w-full h-9 px-3 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-blue bg-white">
+                          <option>4</option><option>6</option><option>8</option><option>12</option>
                         </select>
                       </div>
                       <div>
                         <label className="text-[10px] text-text-4 font-semibold uppercase tracking-wider">Layout Style</label>
-                        <select className="mt-1 w-full h-9 px-3 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-blue bg-white">
-                          <option>Grid</option>
-                          <option>Carousel</option>
-                          <option>List</option>
+                        <select onChange={() => setHasChanges(true)} className="mt-1 w-full h-9 px-3 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-blue bg-white">
+                          <option>Grid</option><option>Carousel</option><option>List</option>
                         </select>
                       </div>
                       <div>
                         <label className="text-[10px] text-text-4 font-semibold uppercase tracking-wider">Background</label>
-                        <select className="mt-1 w-full h-9 px-3 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-blue bg-white">
-                          <option>White</option>
-                          <option>Off-White</option>
-                          <option>Navy</option>
+                        <select onChange={() => setHasChanges(true)} className="mt-1 w-full h-9 px-3 rounded-lg border border-gray-200 text-xs focus:outline-none focus:border-blue bg-white">
+                          <option>White</option><option>Off-White</option><option>Navy</option>
                         </select>
                       </div>
                     </div>
@@ -213,18 +196,11 @@ export default function HomepageBuilderPage() {
         {/* Preview Panel */}
         <div className="bg-white rounded-xl border border-gray-200 p-4 sticky top-4">
           <h3 className="font-semibold text-sm text-text-1 mb-3 flex items-center gap-2">
-            <Eye size={16} className="text-blue" />
-            Live Preview
+            <Eye size={16} className="text-blue" /> Live Preview
           </h3>
-          <div className={`border border-gray-200 rounded-lg overflow-hidden bg-off-white ${
-            previewMode === "mobile" ? "max-w-[280px] mx-auto" : ""
-          }`}>
+          <div className={`border border-gray-200 rounded-lg overflow-hidden bg-off-white ${previewMode === "mobile" ? "max-w-[280px] mx-auto" : ""}`}>
             {sorted.filter((s) => s.enabled).map((section) => (
-              <div
-                key={section.id}
-                className="border-b border-dashed border-gray-200 last:border-0 p-2 hover:bg-blue/5 transition-colors cursor-pointer"
-                onClick={() => setSelectedSection(section.id)}
-              >
+              <div key={section.id} className="border-b border-dashed border-gray-200 last:border-0 p-2 hover:bg-blue/5 transition-colors cursor-pointer" onClick={() => setSelectedSection(section.id)}>
                 <div className="flex items-center gap-1.5">
                   <section.icon size={10} className="text-text-4" />
                   <span className="text-[9px] text-text-3 font-medium">{section.name}</span>
@@ -233,9 +209,7 @@ export default function HomepageBuilderPage() {
               </div>
             ))}
           </div>
-          <p className="text-[10px] text-text-4 mt-3 text-center">
-            Click a section to configure
-          </p>
+          <p className="text-[10px] text-text-4 mt-3 text-center">Click a section to configure</p>
         </div>
       </div>
     </AdminShell>
