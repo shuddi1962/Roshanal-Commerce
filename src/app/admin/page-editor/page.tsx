@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import { insforge } from "@/lib/insforge";
 import {
-  Plus, Trash2, Loader2, Save, X, GripVertical, Eye,
+  Plus, Trash2, Loader2, Save, X, GripVertical,
   Type, Image, Columns, List, Video, Code, Quote, Minus,
   ChevronUp, ChevronDown, Copy, Settings, Layout, FileText,
-  ToggleLeft, ToggleRight, Edit2, ExternalLink,
+  Edit2,
 } from "lucide-react";
 
 interface PageBlock {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ShoppingBag, Search, Eye, Package, Truck, CheckCircle2, Clock, XCircle } from "lucide-react";
+import { Search, Eye, Package, Truck, CheckCircle2, Clock, XCircle } from "lucide-react";
 
 const demoOrders = [
   { id: "ORD-5001", customer: "Emeka Obi", items: 2, total: 4685000, status: "pending", date: "2024-03-15", address: "12 Marina Rd, Lagos" },

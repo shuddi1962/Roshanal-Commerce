@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import {
   Users, UserPlus, Target, Phone, Mail, MessageSquare, TrendingUp,
-  Search, MoreVertical, ArrowRight, Star, Building2, Globe, X,
-  Save, Edit, Trash2, ChevronRight, Plus,
+  Search, MoreVertical, Star, Building2, Globe, X,
+  Save, Edit, Trash2, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AdminShell from "@/components/admin/admin-shell";
@@ -323,7 +323,7 @@ export default function CRMPage() {
                       <Search size={14} /> {scraping ? "Scraping..." : "Scrape Leads"}
                     </Button>
                   </div>
-                  <p className="text-xs text-text-4">Results will appear in the Pipeline as "New Leads"</p>
+                  <p className="text-xs text-text-4">Results will appear in the Pipeline as &quot;New Leads&quot;</p>
                 </div>
                 <div className="bg-white rounded-xl border border-border p-5">
                   <h3 className="font-semibold text-text-1 mb-4 flex items-center gap-2"><Target size={18} /> AI Lead Scoring</h3>

@@ -37,7 +37,7 @@ export default function AdminFeaturesPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [saving, setSaving] = useState(false);
-  const [loaded, setLoaded] = useState(false);
+  const [, setLoaded] = useState(false);
 
   const loadFeatures = useCallback(async () => {
     try {

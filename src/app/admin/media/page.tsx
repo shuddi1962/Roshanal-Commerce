@@ -5,8 +5,7 @@ import AdminShell from "@/components/admin/admin-shell";
 import { insforge } from "@/lib/insforge";
 import {
   Upload, Image, FileText, Film, Music, Trash2, Loader2, Search,
-  Grid, List, Download, Copy, X, Eye, FolderPlus, Check,
-  Filter, SortAsc,
+  Grid, List, Copy, X, Eye, FolderPlus, Check,
 } from "lucide-react";
 
 interface MediaFile {

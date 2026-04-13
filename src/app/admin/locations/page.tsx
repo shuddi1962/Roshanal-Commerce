@@ -5,7 +5,7 @@ import AdminShell from "@/components/admin/admin-shell";
 import { insforge } from "@/lib/insforge";
 import {
   Plus, Edit2, Trash2, Loader2, Search, MapPin, X,
-  ToggleLeft, ToggleRight, Warehouse, Phone, Mail, Clock,
+  ToggleLeft, ToggleRight, Warehouse, Mail, Clock,
   Package, Eye,
 } from "lucide-react";
 

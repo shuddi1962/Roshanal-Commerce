@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import {
   Mail, Tag, Megaphone, Plus, Eye, Edit, BarChart3, Globe, X, Trash2,
-  Send, Copy, ToggleLeft, ToggleRight, Save, ExternalLink,
+  Copy, ToggleLeft, ToggleRight, Save,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AdminShell from "@/components/admin/admin-shell";

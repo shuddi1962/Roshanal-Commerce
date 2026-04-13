@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Truck, Plus, Edit, Trash2, Save, MapPin } from "lucide-react";
+import { Plus, Edit, Trash2, Save, MapPin } from "lucide-react";
 
 const defaultZones = [
   { id: 1, name: "Lagos", regions: ["Lagos Island", "Lagos Mainland", "Ikeja", "Lekki"], flatRate: 2000, freeAbove: 50000, enabled: true },

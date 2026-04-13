@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Package, Plus, Search, Edit, Trash2, Eye, ToggleLeft, ToggleRight, Image } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Eye, ToggleLeft, ToggleRight, Image } from "lucide-react";
 
 const demoProducts = [
   { id: 1, name: "Yamaha 200HP Outboard Engine", sku: "YAM-200HP", price: 4500000, stock: 5, status: "active", category: "Boat Engines", sales: 12, image: null },

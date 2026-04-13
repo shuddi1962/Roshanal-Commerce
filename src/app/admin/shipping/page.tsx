@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import { insforge } from "@/lib/insforge";
 import {
-  Plus, Edit2, Trash2, Loader2, Search, MapPin, X, Truck,
-  ToggleLeft, ToggleRight, Package, Clock, DollarSign,
+  Plus, Edit2, Trash2, Loader2, MapPin, X, Truck,
+  Package, Clock,
 } from "lucide-react";
 
 interface ShippingZone {

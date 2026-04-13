@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import AdminShell from "@/components/admin/admin-shell";
-import { Image, Plus, Eye, Edit, Trash2, ToggleLeft, ToggleRight, X, Save, Upload } from "lucide-react";
+import { Image, Plus, Eye, Edit, Trash2, ToggleLeft, ToggleRight, X, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { insforge } from "@/lib/insforge";
 
@@ -132,7 +132,7 @@ export default function AdminBannersPage() {
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <div className="w-16 h-10 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
-                          {banner.image_url ? <img src={banner.image_url} alt="" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} /> : null}
+                          {banner.image_url ? <img src={banner.image_url} alt={banner.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} /> : null}
                           <Image size={16} className="text-text-4" />
                         </div>
                         <span className="font-medium">{banner.title}</span>

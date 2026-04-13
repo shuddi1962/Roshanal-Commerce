@@ -5,7 +5,7 @@ import AdminShell from "@/components/admin/admin-shell";
 import { insforge } from "@/lib/insforge";
 import {
   Plus, Edit2, Trash2, Loader2, X, Eye, ToggleLeft, ToggleRight,
-  Megaphone, Clock, Target, MousePointer, ExternalLink, Copy,
+  Megaphone, Clock, Target, MousePointer,
 } from "lucide-react";
 
 interface Popup {

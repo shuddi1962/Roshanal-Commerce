@@ -5,7 +5,7 @@ import AdminShell from "@/components/admin/admin-shell";
 import { insforge } from "@/lib/insforge";
 import {
   Plus, Edit2, Trash2, ChevronRight, ChevronDown, Loader2, Search,
-  FolderTree, Image, GripVertical, ToggleLeft, ToggleRight, X,
+  FolderTree, GripVertical, ToggleLeft, ToggleRight, X,
 } from "lucide-react";
 
 interface Category {

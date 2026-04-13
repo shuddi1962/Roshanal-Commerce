@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import AdminShell from "@/components/admin/admin-shell";
 import { insforge } from "@/lib/insforge";
 import {
-  Save, ArrowLeft, Image, Plus, X, Trash2, Loader2, Upload,
+  Save, ArrowLeft, Image, Plus, Trash2, Loader2,
   Package, Tag, DollarSign, Layers, Info, ToggleLeft, ToggleRight,
   Bold, Italic, List,
 } from "lucide-react";
@@ -343,7 +343,7 @@ export default function ProductCreatePage() {
                 {images.map((img, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 border border-gray-200">
-                      {img ? <img src={img} alt="" className="w-full h-full rounded-lg object-cover" /> : <Image size={18} className="text-gray-300" />}
+                      {img ? <img src={img} alt={`Product image ${i + 1}`} className="w-full h-full rounded-lg object-cover" /> : <Image size={18} className="text-gray-300" />}
                     </div>
                     <input
                       value={img}

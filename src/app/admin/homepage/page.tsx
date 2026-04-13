@@ -65,7 +65,7 @@ export default function HomepageBuilderPage() {
   const saveLayout = async () => {
     setSaving(true);
     try {
-      const toSave = sections.map(({ icon, ...rest }) => rest);
+      const toSave = sections.map(({ icon: _icon, ...rest }) => rest);
       await insforge.database.from("settings").upsert({ key: "homepage_layout", value: toSave });
       setHasChanges(false);
     } catch (err) {

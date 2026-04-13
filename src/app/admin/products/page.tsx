@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 import {
   Plus,
   Search,
@@ -15,7 +14,6 @@ import {
   Star,
   CheckCircle2,
   XCircle,
-  Archive,
   X,
   Save,
 } from "lucide-react";
@@ -57,7 +55,7 @@ const emptyProduct = {
 export default function AdminProductsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [categoryFilter] = useState("all");
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [dbProducts, setDbProducts] = useState<DBProduct[]>([]);
   const [loading, setLoading] = useState(true);

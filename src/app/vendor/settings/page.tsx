@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Settings, Save, Bell, CreditCard, Shield, User } from "lucide-react";
+import { Save, Bell, CreditCard, Shield, User } from "lucide-react";
 
 export default function VendorSettingsPage() {
   const [profile, setProfile] = useState({ name: "Roshanal Vendor", email: "vendor@roshanal.com", phone: "+234 800 000 0002" });

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Percent, Plus, Trash2, ToggleLeft, ToggleRight, Tag } from "lucide-react";
+import { Plus, Trash2, ToggleLeft, ToggleRight, Tag } from "lucide-react";
 
 const demoCoupons = [
   { id: 1, code: "VENDOR10", type: "percentage", value: 10, minOrder: 20000, usageLimit: 100, used: 34, active: true, expires: "2024-06-30" },

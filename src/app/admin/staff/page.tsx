@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import { insforge } from "@/lib/insforge";
 import {
-  Plus, Edit2, Trash2, Loader2, Search, UserPlus, X,
+  Edit2, Trash2, Loader2, Search, UserPlus, X, Plus,
   ToggleLeft, ToggleRight, Shield, Mail, Phone, Eye, EyeOff,
   Key, Users,
 } from "lucide-react";

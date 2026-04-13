@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import {
   DollarSign, TrendingUp, TrendingDown, CreditCard, Receipt,
-  PieChart, ArrowUpRight, ArrowDownRight, Download, Calendar,
+  PieChart, ArrowUpRight, ArrowDownRight, Download,
   FileText, Building2, Percent, X, Plus, Edit, Trash2, Save, Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

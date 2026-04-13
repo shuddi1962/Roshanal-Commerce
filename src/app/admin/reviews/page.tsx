@@ -47,7 +47,7 @@ export default function AdminReviewsPage() {
   const [loading, setLoading] = useState(true);
   const [replyModal, setReplyModal] = useState<Review | null>(null);
   const [replyText, setReplyText] = useState("");
-  const [viewReview, setViewReview] = useState<Review | null>(null);
+  const [, setViewReview] = useState<Review | null>(null);
 
   useEffect(() => { loadReviews(); }, []);
 

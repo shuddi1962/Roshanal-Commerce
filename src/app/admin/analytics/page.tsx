@@ -34,8 +34,8 @@ export default function AdminAnalyticsPage() {
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalCustomers, setTotalCustomers] = useState(0);
   const [avgOrderValue, setAvgOrderValue] = useState(0);
-  const [pageViews, setPageViews] = useState("89.5K");
-  const [conversionRate, setConversionRate] = useState("3.2%");
+  const [pageViews] = useState("89.5K");
+  const [conversionRate] = useState("3.2%");
 
   // Chart & lists
   const [revenueData, setRevenueData] = useState<{ month: string; value: number }[]>([]);

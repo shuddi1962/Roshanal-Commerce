@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import {
   Search, Download, Eye, Package, ChevronDown, Clock, Truck, CheckCircle2,
-  XCircle, AlertCircle, Printer, X, ChevronRight, RefreshCw, MapPin,
+  XCircle, AlertCircle, Printer, X, RefreshCw, MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AdminShell from "@/components/admin/admin-shell";

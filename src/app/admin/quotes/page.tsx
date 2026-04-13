@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import {
-  FileText, Search, Plus, Eye, Edit, Trash2, Send, CheckCircle2,
+  FileText, Search, Plus, Eye, Trash2, Send, CheckCircle2,
   DollarSign, TrendingUp, Download, X, Save,
 } from "lucide-react";
 import { insforge } from "@/lib/insforge";
