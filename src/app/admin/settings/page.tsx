@@ -44,24 +44,32 @@ const settingsTabs = [
   { id: "bing", label: "Bing", icon: Link2 },
 ];
 
-const defaultApiKeys = [
-  { name: "Paystack", category: "Payments", connected: true, key: "sk_live_****...8f3a" },
-  { name: "Stripe", category: "Payments", connected: true, key: "sk_live_****...2d4e" },
-  { name: "Flutterwave", category: "Payments", connected: false, key: "" },
-  { name: "Squad.co", category: "Payments", connected: false, key: "" },
-  { name: "NowPayments", category: "Payments", connected: false, key: "" },
-  { name: "OpenRouter", category: "AI", connected: true, key: "sk-or-****...7b1c" },
-  { name: "Vapi.ai", category: "AI", connected: true, key: "vapi_****...3e5f" },
-  { name: "Open Exchange Rates", category: "Currency", connected: true, key: "oer_****...9a2b" },
-  { name: "ipapi.co", category: "Geo", connected: true, key: "Free tier (no key)" },
-  { name: "Mapbox", category: "Maps", connected: true, key: "pk.****...4c8d" },
-  { name: "Termii", category: "SMS", connected: true, key: "TLR****...1e2f" },
-  { name: "OneSignal", category: "Push", connected: false, key: "" },
-  { name: "Apify", category: "Scraping", connected: true, key: "apify_****...6g7h" },
-  { name: "Kie.ai", category: "Video", connected: false, key: "" },
-  { name: "Google Analytics", category: "Analytics", connected: true, key: "G-XXXXXXXXXX" },
-  { name: "Google Indexing API", category: "SEO", connected: true, key: "Service Account" },
-  { name: "Bing Webmaster", category: "SEO", connected: false, key: "" },
+interface ApiProvider {
+  name: string;
+  category: string;
+  connected: boolean;
+  fields: Record<string, string>;
+  fieldConfig: { key: string; label: string; placeholder: string; type?: string }[];
+}
+
+const defaultApiKeys: ApiProvider[] = [
+  { name: "Paystack", category: "Payments", connected: true, fields: { public_key: "pk_live_****...8f3a", secret_key: "sk_live_****...2d4e", webhook_secret: "" }, fieldConfig: [{ key: "public_key", label: "Public Key", placeholder: "pk_live_..." }, { key: "secret_key", label: "Secret Key", placeholder: "sk_live_..." }, { key: "webhook_secret", label: "Webhook Secret", placeholder: "whsec_..." }] },
+  { name: "Stripe", category: "Payments", connected: true, fields: { publishable_key: "pk_live_****...1a2b", secret_key: "sk_live_****...2d4e", webhook_secret: "" }, fieldConfig: [{ key: "publishable_key", label: "Publishable Key", placeholder: "pk_live_..." }, { key: "secret_key", label: "Secret Key", placeholder: "sk_live_..." }, { key: "webhook_secret", label: "Webhook Signing Secret", placeholder: "whsec_..." }] },
+  { name: "Flutterwave", category: "Payments", connected: false, fields: { public_key: "", secret_key: "", encryption_key: "" }, fieldConfig: [{ key: "public_key", label: "Public Key", placeholder: "FLWPUBK-..." }, { key: "secret_key", label: "Secret Key", placeholder: "FLWSECK-..." }, { key: "encryption_key", label: "Encryption Key", placeholder: "FLWSECK_TEST..." }] },
+  { name: "Squad.co", category: "Payments", connected: false, fields: { api_key: "", secret_key: "", merchant_id: "" }, fieldConfig: [{ key: "api_key", label: "API Key", placeholder: "sandbox_sk_..." }, { key: "secret_key", label: "Secret Key", placeholder: "sk_..." }, { key: "merchant_id", label: "Merchant ID", placeholder: "SBN..." }] },
+  { name: "NowPayments", category: "Payments", connected: false, fields: { api_key: "", ipn_secret: "" }, fieldConfig: [{ key: "api_key", label: "API Key", placeholder: "Enter NowPayments API key" }, { key: "ipn_secret", label: "IPN Secret Key", placeholder: "IPN callback secret" }] },
+  { name: "OpenRouter", category: "AI", connected: true, fields: { api_key: "sk-or-****...7b1c" }, fieldConfig: [{ key: "api_key", label: "API Key", placeholder: "sk-or-..." }] },
+  { name: "Vapi.ai", category: "AI", connected: true, fields: { api_key: "vapi_****...3e5f", phone_number_id: "" }, fieldConfig: [{ key: "api_key", label: "API Key", placeholder: "vapi_..." }, { key: "phone_number_id", label: "Phone Number ID", placeholder: "Phone number ID from dashboard" }] },
+  { name: "Open Exchange Rates", category: "Currency", connected: true, fields: { app_id: "oer_****...9a2b" }, fieldConfig: [{ key: "app_id", label: "App ID", placeholder: "Your OXR App ID" }] },
+  { name: "ipapi.co", category: "Geo", connected: true, fields: { api_key: "" }, fieldConfig: [{ key: "api_key", label: "API Key (optional)", placeholder: "Free tier — leave blank for free" }] },
+  { name: "Mapbox", category: "Maps", connected: true, fields: { access_token: "pk.****...4c8d" }, fieldConfig: [{ key: "access_token", label: "Access Token", placeholder: "pk.eyJ1Ijo..." }] },
+  { name: "Termii", category: "SMS", connected: true, fields: { api_key: "TLR****...1e2f", sender_id: "Roshanal" }, fieldConfig: [{ key: "api_key", label: "API Key", placeholder: "TLR..." }, { key: "sender_id", label: "Sender ID", placeholder: "Your registered sender ID" }] },
+  { name: "OneSignal", category: "Push", connected: false, fields: { app_id: "", rest_api_key: "" }, fieldConfig: [{ key: "app_id", label: "App ID", placeholder: "OneSignal App ID" }, { key: "rest_api_key", label: "REST API Key", placeholder: "REST API Key from dashboard" }] },
+  { name: "Apify", category: "Scraping", connected: true, fields: { api_token: "apify_****...6g7h" }, fieldConfig: [{ key: "api_token", label: "API Token", placeholder: "apify_api_..." }] },
+  { name: "Kie.ai", category: "Video", connected: false, fields: { api_key: "", project_id: "" }, fieldConfig: [{ key: "api_key", label: "API Key", placeholder: "Kie.ai API key" }, { key: "project_id", label: "Project ID", placeholder: "Your project ID" }] },
+  { name: "Google Analytics", category: "Analytics", connected: true, fields: { measurement_id: "G-XXXXXXXXXX", stream_id: "" }, fieldConfig: [{ key: "measurement_id", label: "Measurement ID", placeholder: "G-XXXXXXXXXX" }, { key: "stream_id", label: "Data Stream ID", placeholder: "Stream ID (optional)" }] },
+  { name: "Google Indexing API", category: "SEO", connected: true, fields: { service_account_json: "Service Account configured" }, fieldConfig: [{ key: "service_account_json", label: "Service Account JSON", placeholder: "Paste service account JSON", type: "textarea" }] },
+  { name: "Bing Webmaster", category: "SEO", connected: false, fields: { api_key: "", site_url: "" }, fieldConfig: [{ key: "api_key", label: "API Key", placeholder: "Bing Webmaster API key" }, { key: "site_url", label: "Site URL", placeholder: "https://roshanalglobal.com" }] },
 ];
 
 const defaultPaymentMethods = [
@@ -119,13 +127,27 @@ export default function SettingsPage() {
     supportedCurrencies: ["NGN", "USD", "GBP", "EUR", "GHS", "AED", "CAD", "AUD", "ZAR", "KES", "JPY", "CNY"],
   });
 
-  const [apiKeys, setApiKeys] = useState(defaultApiKeys);
+  const [apiKeys, setApiKeys] = useState<ApiProvider[]>(defaultApiKeys);
   const [appearance, setAppearance] = useState({ sidebarColor: "#0C1A36", accentColor: "#1641C4", layout: "Default" });
   const [paymentMethods, setPaymentMethods] = useState(defaultPaymentMethods);
   const [campaigns, setCampaigns] = useState(defaultCampaigns);
   const [securitySettings, setSecuritySettings] = useState(defaultSecuritySettings);
-  const [apiEditModal, setApiEditModal] = useState<{ name: string; key: string } | null>(null);
-  const [newApiKey, setNewApiKey] = useState("");
+  const [apiEditModal, setApiEditModal] = useState<{ name: string; fields: Record<string, string> } | null>(null);
+  const [newApiFields, setNewApiFields] = useState<Record<string, string>>({});
+  const [siteLogo, setSiteLogo] = useState("");
+  const [siteFavicon, setSiteFavicon] = useState("");
+  const [googleConfig, setGoogleConfig] = useState({
+    ga4_measurement_id: "",
+    search_console_verification: "",
+    my_business_id: "",
+    indexing_api_service_account: "",
+    shopping_feed_merchant_id: "",
+  });
+  const [bingConfig, setBingConfig] = useState({
+    webmaster_verification: "",
+    api_key: "",
+    auto_index_enabled: false,
+  });
 
   const [watermark, setWatermark] = useState({ enabled: true, position: "Bottom Right", opacity: "30" });
   const [tax, setTax] = useState({ vatRate: "7.5", taxDisplay: "Inclusive (prices include VAT)" });
@@ -156,6 +178,10 @@ export default function SettingsPage() {
             case "watermark": setWatermark(val); break;
             case "tax": setTax(val); break;
             case "notifications": setNotifications(val); break;
+            case "site_logo": setSiteLogo(val); break;
+            case "site_favicon": setSiteFavicon(val); break;
+            case "google_config": setGoogleConfig(val); break;
+            case "bing_config": setBingConfig(val); break;
           }
         }
       }
@@ -185,6 +211,25 @@ export default function SettingsPage() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.readAsDataURL(file);
+    });
+
+  const handleLogoUpload = async (file: File) => {
+    const base64 = await fileToBase64(file);
+    setSiteLogo(base64);
+    await saveSettings("site_logo", base64);
+  };
+
+  const handleFaviconUpload = async (file: File) => {
+    const base64 = await fileToBase64(file);
+    setSiteFavicon(base64);
+    await saveSettings("site_favicon", base64);
   };
 
   const SaveButton = ({ settingKey, value }: { settingKey: string; value: unknown }) => (
@@ -257,21 +302,39 @@ export default function SettingsPage() {
                 <div>
                   <label className="text-sm font-medium text-text-2 block mb-1.5">Logo</label>
                   <div className="flex items-center gap-3">
-                    <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-xl">RS</div>
-                    <label className="cursor-pointer">
-                      <Button variant="outline" size="sm">Upload Logo</Button>
-                      <input type="file" accept="image/*" className="hidden" onChange={(e) => { if (e.target.files?.[0]) alert("Logo uploaded: " + e.target.files[0].name); }} />
-                    </label>
+                    {siteLogo ? (
+                      <img src={siteLogo} alt="Site Logo" className="w-16 h-16 rounded-lg object-contain border border-border" />
+                    ) : (
+                      <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-xl">RS</div>
+                    )}
+                    <div className="flex flex-col gap-1">
+                      <label className="cursor-pointer">
+                        <Button variant="outline" size="sm" className="pointer-events-none">Upload Logo</Button>
+                        <input type="file" accept="image/*" className="hidden" onChange={(e) => { if (e.target.files?.[0]) handleLogoUpload(e.target.files[0]); }} />
+                      </label>
+                      {siteLogo && (
+                        <button onClick={() => { setSiteLogo(""); saveSettings("site_logo", ""); }} className="text-[10px] text-red hover:underline text-left">Remove</button>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-text-2 block mb-1.5">Favicon</label>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded bg-blue flex items-center justify-center text-white text-xs font-bold">R</div>
-                    <label className="cursor-pointer">
-                      <Button variant="outline" size="sm">Upload Favicon</Button>
-                      <input type="file" accept="image/*" className="hidden" onChange={(e) => { if (e.target.files?.[0]) alert("Favicon uploaded: " + e.target.files[0].name); }} />
-                    </label>
+                    {siteFavicon ? (
+                      <img src={siteFavicon} alt="Site Favicon" className="w-8 h-8 rounded object-contain border border-border" />
+                    ) : (
+                      <div className="w-8 h-8 rounded bg-blue flex items-center justify-center text-white text-xs font-bold">R</div>
+                    )}
+                    <div className="flex flex-col gap-1">
+                      <label className="cursor-pointer">
+                        <Button variant="outline" size="sm" className="pointer-events-none">Upload Favicon</Button>
+                        <input type="file" accept="image/*" className="hidden" onChange={(e) => { if (e.target.files?.[0]) handleFaviconUpload(e.target.files[0]); }} />
+                      </label>
+                      {siteFavicon && (
+                        <button onClick={() => { setSiteFavicon(""); saveSettings("site_favicon", ""); }} className="text-[10px] text-red hover:underline text-left">Remove</button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -364,22 +427,22 @@ export default function SettingsPage() {
                       <div className={`w-2.5 h-2.5 rounded-full ${api.connected ? "bg-green-500" : "bg-gray-300"}`} />
                       <div>
                         <p className="text-sm font-medium text-text-1">{api.name}</p>
-                        <p className="text-xs text-text-4">{api.category}</p>
+                        <p className="text-xs text-text-4">{api.category} &middot; {api.fieldConfig.length} field{api.fieldConfig.length > 1 ? "s" : ""}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       {api.connected ? (
                         <>
                           <span className="text-xs font-mono text-text-4">
-                            {showKey === api.name ? api.key : "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}
+                            {showKey === api.name ? Object.values(api.fields)[0] : "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}
                           </span>
                           <button onClick={() => setShowKey(showKey === api.name ? null : api.name)} className="text-text-4 hover:text-text-2">
                             {showKey === api.name ? <EyeOff size={14} /> : <Eye size={14} />}
                           </button>
-                          <Button variant="outline" size="sm" onClick={() => { setApiEditModal({ name: api.name, key: api.key }); setNewApiKey(api.key); }}>Update</Button>
+                          <Button variant="outline" size="sm" onClick={() => { setApiEditModal({ name: api.name, fields: { ...api.fields } }); setNewApiFields({ ...api.fields }); }}>Update</Button>
                         </>
                       ) : (
-                        <Button size="sm" onClick={() => { setApiEditModal({ name: api.name, key: "" }); setNewApiKey(""); }}>Connect</Button>
+                        <Button size="sm" onClick={() => { const emptyFields: Record<string, string> = {}; api.fieldConfig.forEach(f => { emptyFields[f.key] = ""; }); setApiEditModal({ name: api.name, fields: emptyFields }); setNewApiFields(emptyFields); }}>Connect</Button>
                       )}
                     </div>
                   </div>
@@ -566,47 +629,65 @@ export default function SettingsPage() {
             </div>
           )}
 
-          {/* Google / Bing */}
-          {(activeTab === "google" || activeTab === "bing") && (
+          {/* Google */}
+          {activeTab === "google" && (
             <div className="bg-white rounded-xl border border-border p-6">
-              <h3 className="font-semibold text-lg text-text-1 mb-5">
-                {activeTab === "google" ? "Google Integrations" : "Bing Integrations"}
-              </h3>
+              <h3 className="font-semibold text-lg text-text-1 mb-5">Google Integrations</h3>
               <div className="space-y-4">
-                {(activeTab === "google"
-                  ? [
-                      { name: "Google Analytics 4", desc: "Track website analytics", connected: true, key: "G-XXXXXXXXXX" },
-                      { name: "Google Search Console", desc: "Monitor search performance", connected: true, key: "Verified" },
-                      { name: "Google My Business", desc: "Sync business info", connected: false, key: "" },
-                      { name: "Google Indexing API", desc: "Instant URL indexing", connected: true, key: "Service Account" },
-                      { name: "Google Shopping Feed", desc: "Auto XML product feed", connected: true, key: "Active" },
-                    ]
-                  : [
-                      { name: "Bing Webmaster Tools", desc: "Site verification & indexing", connected: false, key: "" },
-                      { name: "Bing Auto-Indexing", desc: "Submit URLs automatically", connected: false, key: "" },
-                    ]
-                ).map((integration) => (
-                  <div key={integration.name} className="flex items-center justify-between p-4 rounded-lg border border-border">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2.5 h-2.5 rounded-full ${integration.connected ? "bg-green-500" : "bg-gray-300"}`} />
-                      <div>
-                        <p className="text-sm font-medium text-text-1">{integration.name}</p>
-                        <p className="text-xs text-text-4">{integration.desc}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {integration.connected && <span className="text-xs text-green-600 font-medium">{integration.key}</span>}
-                      <Button
-                        variant={integration.connected ? "outline" : "default"}
-                        size="sm"
-                        onClick={() => alert(`${integration.connected ? "Configure" : "Connect"} ${integration.name} — integration panel coming soon.`)}
-                      >
-                        {integration.connected ? "Configure" : "Connect"}
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                <div>
+                  <label className="text-sm font-medium text-text-2 block mb-1.5">Google Analytics 4 — Measurement ID</label>
+                  <input value={googleConfig.ga4_measurement_id} onChange={(e) => setGoogleConfig({ ...googleConfig, ga4_measurement_id: e.target.value })} placeholder="G-XXXXXXXXXX" className="w-full h-10 px-3 rounded-lg border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue/20 focus:border-blue" />
+                  <p className="text-[10px] text-text-4 mt-1">Find this in GA4 &rarr; Admin &rarr; Data Streams</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-text-2 block mb-1.5">Google Search Console — Verification Meta Tag</label>
+                  <input value={googleConfig.search_console_verification} onChange={(e) => setGoogleConfig({ ...googleConfig, search_console_verification: e.target.value })} placeholder="google-site-verification=XXXXXXXXXX" className="w-full h-10 px-3 rounded-lg border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue/20 focus:border-blue" />
+                  <p className="text-[10px] text-text-4 mt-1">HTML meta tag content value from Search Console verification</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-text-2 block mb-1.5">Google My Business — Place ID</label>
+                  <input value={googleConfig.my_business_id} onChange={(e) => setGoogleConfig({ ...googleConfig, my_business_id: e.target.value })} placeholder="ChIJ..." className="w-full h-10 px-3 rounded-lg border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue/20 focus:border-blue" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-text-2 block mb-1.5">Google Indexing API — Service Account Email</label>
+                  <input value={googleConfig.indexing_api_service_account} onChange={(e) => setGoogleConfig({ ...googleConfig, indexing_api_service_account: e.target.value })} placeholder="indexing@project.iam.gserviceaccount.com" className="w-full h-10 px-3 rounded-lg border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue/20 focus:border-blue" />
+                  <p className="text-[10px] text-text-4 mt-1">Service account with Indexing API enabled in Google Cloud Console</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-text-2 block mb-1.5">Google Shopping Feed — Merchant Center ID</label>
+                  <input value={googleConfig.shopping_feed_merchant_id} onChange={(e) => setGoogleConfig({ ...googleConfig, shopping_feed_merchant_id: e.target.value })} placeholder="123456789" className="w-full h-10 px-3 rounded-lg border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue/20 focus:border-blue" />
+                </div>
               </div>
+              <SaveButton settingKey="google_config" value={googleConfig} />
+            </div>
+          )}
+
+          {/* Bing */}
+          {activeTab === "bing" && (
+            <div className="bg-white rounded-xl border border-border p-6">
+              <h3 className="font-semibold text-lg text-text-1 mb-5">Bing Integrations</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-text-2 block mb-1.5">Bing Webmaster Tools — Verification Meta Tag</label>
+                  <input value={bingConfig.webmaster_verification} onChange={(e) => setBingConfig({ ...bingConfig, webmaster_verification: e.target.value })} placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" className="w-full h-10 px-3 rounded-lg border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue/20 focus:border-blue" />
+                  <p className="text-[10px] text-text-4 mt-1">Content value from Bing Webmaster meta tag verification</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-text-2 block mb-1.5">Bing Webmaster API Key</label>
+                  <input value={bingConfig.api_key} onChange={(e) => setBingConfig({ ...bingConfig, api_key: e.target.value })} placeholder="Enter Bing Webmaster API key" className="w-full h-10 px-3 rounded-lg border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue/20 focus:border-blue" />
+                  <p className="text-[10px] text-text-4 mt-1">Generate from Bing Webmaster Tools &rarr; Settings &rarr; API Access</p>
+                </div>
+                <div className="flex items-center justify-between p-4 rounded-lg border border-border">
+                  <div>
+                    <p className="text-sm font-medium text-text-1">Auto-Indexing</p>
+                    <p className="text-xs text-text-4">Automatically submit new/updated URLs to Bing for indexing</p>
+                  </div>
+                  <button onClick={() => setBingConfig({ ...bingConfig, auto_index_enabled: !bingConfig.auto_index_enabled })}>
+                    {bingConfig.auto_index_enabled ? <ToggleRight size={28} className="text-blue" /> : <ToggleLeft size={28} className="text-text-4" />}
+                  </button>
+                </div>
+              </div>
+              <SaveButton settingKey="bing_config" value={bingConfig} />
             </div>
           )}
 
@@ -708,37 +789,56 @@ export default function SettingsPage() {
       </div>
 
       {/* API Key Edit Modal */}
-      {apiEditModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center" onClick={() => setApiEditModal(null)}>
-          <div className="bg-white rounded-2xl w-[450px] p-6" onClick={(e) => e.stopPropagation()}>
-            <h3 className="font-semibold text-lg mb-4">{apiEditModal.key ? "Update" : "Connect"} {apiEditModal.name}</h3>
-            <div>
-              <label className="text-sm font-medium text-text-2 block mb-1.5">API Key</label>
-              <input
-                type="text"
-                value={newApiKey}
-                onChange={(e) => setNewApiKey(e.target.value)}
-                placeholder="Enter API key..."
-                className="w-full h-10 px-3 rounded-lg border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue/20"
-              />
-            </div>
-            <div className="flex gap-2 mt-5">
-              <Button variant="outline" className="flex-1" onClick={() => setApiEditModal(null)}>Cancel</Button>
-              <Button className="flex-1" onClick={() => {
-                setApiKeys(apiKeys.map((a) =>
-                  a.name === apiEditModal.name ? { ...a, connected: !!newApiKey, key: newApiKey || "" } : a
-                ));
-                saveSettings("api_keys", apiKeys.map((a) =>
-                  a.name === apiEditModal.name ? { ...a, connected: !!newApiKey, key: newApiKey || "" } : a
-                ));
-                setApiEditModal(null);
-              }}>
-                {apiEditModal.key ? "Update" : "Connect"}
-              </Button>
+      {apiEditModal && (() => {
+        const provider = apiKeys.find(a => a.name === apiEditModal.name);
+        const isConnected = provider?.connected;
+        return (
+          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center" onClick={() => setApiEditModal(null)}>
+            <div className="bg-white rounded-2xl w-[500px] max-h-[80vh] overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
+              <h3 className="font-semibold text-lg mb-1">{isConnected ? "Update" : "Connect"} {apiEditModal.name}</h3>
+              <p className="text-xs text-text-4 mb-4">{provider?.category} integration</p>
+              <div className="space-y-3">
+                {provider?.fieldConfig.map((fc) => (
+                  <div key={fc.key}>
+                    <label className="text-sm font-medium text-text-2 block mb-1.5">{fc.label}</label>
+                    {fc.type === "textarea" ? (
+                      <textarea
+                        value={newApiFields[fc.key] || ""}
+                        onChange={(e) => setNewApiFields({ ...newApiFields, [fc.key]: e.target.value })}
+                        placeholder={fc.placeholder}
+                        rows={3}
+                        className="w-full px-3 py-2 rounded-lg border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue/20 resize-none"
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        value={newApiFields[fc.key] || ""}
+                        onChange={(e) => setNewApiFields({ ...newApiFields, [fc.key]: e.target.value })}
+                        placeholder={fc.placeholder}
+                        className="w-full h-10 px-3 rounded-lg border border-border text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue/20"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-2 mt-5">
+                <Button variant="outline" className="flex-1" onClick={() => setApiEditModal(null)}>Cancel</Button>
+                <Button className="flex-1" onClick={() => {
+                  const hasAnyValue = Object.values(newApiFields).some(v => v.trim());
+                  const updated = apiKeys.map((a) =>
+                    a.name === apiEditModal.name ? { ...a, connected: hasAnyValue, fields: { ...newApiFields } } : a
+                  );
+                  setApiKeys(updated);
+                  saveSettings("api_keys", updated);
+                  setApiEditModal(null);
+                }}>
+                  {isConnected ? "Update" : "Connect"}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 }

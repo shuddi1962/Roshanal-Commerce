@@ -190,8 +190,25 @@ export default function AdminBannersPage() {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold text-text-2 mb-1 block">Image URL</label>
-                <input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className="w-full h-10 px-3 rounded-lg border border-border text-sm focus:outline-none focus:border-blue" placeholder="/banners/my-banner.jpg" />
+                <label className="text-xs font-semibold text-text-2 mb-1 block">Banner Image</label>
+                <div className="flex gap-2">
+                  <input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className="flex-1 h-10 px-3 rounded-lg border border-border text-sm focus:outline-none focus:border-blue" placeholder="Image URL or upload" />
+                  <label className="cursor-pointer">
+                    <Button variant="outline" size="sm" className="h-10 pointer-events-none">Upload</Button>
+                    <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                      if (e.target.files?.[0]) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => setForm({ ...form, image_url: reader.result as string });
+                        reader.readAsDataURL(e.target.files[0]);
+                      }
+                    }} />
+                  </label>
+                </div>
+                {form.image_url && (
+                  <div className="mt-2 h-24 rounded-lg overflow-hidden border border-border">
+                    <img src={form.image_url} alt="Preview" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                  </div>
+                )}
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>

@@ -24,22 +24,22 @@ import { Badge } from "@/components/ui/badge";
 import type { BoatVesselType } from "@/types";
 
 const vesselTypes: { type: BoatVesselType; name: string; description: string; startingPrice: number; image: string; engineIncluded: boolean; lengthRange: string }[] = [
-  { type: "fishing-boat", name: "Fishing Boat", description: "Durable fishing vessels for commercial and sport fishing", startingPrice: 8500000, image: "/boats/fishing.jpg", engineIncluded: true, lengthRange: "16–32 ft" },
-  { type: "speed-boat", name: "Speed Boat", description: "High-performance speed boats for recreation and patrol", startingPrice: 12000000, image: "/boats/speed.jpg", engineIncluded: true, lengthRange: "18–28 ft" },
-  { type: "pontoon", name: "Pontoon Boat", description: "Stable flat-deck boats for leisure and touring", startingPrice: 6500000, image: "/boats/pontoon.jpg", engineIncluded: true, lengthRange: "20–30 ft" },
-  { type: "cabin-cruiser", name: "Cabin Cruiser", description: "Comfortable cabin boats for extended voyages", startingPrice: 25000000, image: "/boats/cruiser.jpg", engineIncluded: true, lengthRange: "25–45 ft" },
-  { type: "catamaran", name: "Catamaran", description: "Twin-hull vessels with excellent stability", startingPrice: 18000000, image: "/boats/catamaran.jpg", engineIncluded: true, lengthRange: "24–50 ft" },
-  { type: "tugboat", name: "Tugboat", description: "Powerful tugboats for towing and harbour operations", startingPrice: 45000000, image: "/boats/tugboat.jpg", engineIncluded: true, lengthRange: "30–60 ft" },
-  { type: "barge", name: "Barge", description: "Flat-bottom cargo and transport barges", startingPrice: 35000000, image: "/boats/barge.jpg", engineIncluded: false, lengthRange: "40–120 ft" },
-  { type: "patrol-boat", name: "Patrol Boat", description: "Military/security patrol and surveillance vessels", startingPrice: 20000000, image: "/boats/patrol.jpg", engineIncluded: true, lengthRange: "20–45 ft" },
-  { type: "ferry", name: "Ferry", description: "Passenger and vehicle ferry boats", startingPrice: 55000000, image: "/boats/ferry.jpg", engineIncluded: true, lengthRange: "40–80 ft" },
-  { type: "workboat", name: "Workboat", description: "General-purpose industrial and utility workboats", startingPrice: 15000000, image: "/boats/workboat.jpg", engineIncluded: true, lengthRange: "20–50 ft" },
-  { type: "houseboat", name: "Houseboat", description: "Floating residential vessels with full amenities", startingPrice: 30000000, image: "/boats/houseboat.jpg", engineIncluded: true, lengthRange: "30–60 ft" },
-  { type: "yacht", name: "Yacht", description: "Luxury yachts for premium marine experience", startingPrice: 80000000, image: "/boats/yacht.jpg", engineIncluded: true, lengthRange: "35–80 ft" },
-  { type: "dinghy", name: "Dinghy", description: "Small lightweight boats for tenders and short trips", startingPrice: 2500000, image: "/boats/dinghy.jpg", engineIncluded: false, lengthRange: "8–14 ft" },
-  { type: "jon-boat", name: "Jon Boat", description: "Flat-bottom aluminium boats for shallow waters", startingPrice: 3500000, image: "/boats/jon-boat.jpg", engineIncluded: false, lengthRange: "10–20 ft" },
-  { type: "center-console", name: "Center Console", description: "Versatile boats with center helm for fishing and cruising", startingPrice: 10000000, image: "/boats/center-console.jpg", engineIncluded: true, lengthRange: "18–36 ft" },
-  { type: "custom", name: "Custom Build", description: "Fully custom vessel to your exact specifications", startingPrice: 0, image: "/boats/custom.jpg", engineIncluded: false, lengthRange: "Any" },
+  { type: "fishing-boat", name: "Fishing Boat", description: "Durable fishing vessels for commercial and sport fishing", startingPrice: 8500000, image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "16–32 ft" },
+  { type: "speed-boat", name: "Speed Boat", description: "High-performance speed boats for recreation and patrol", startingPrice: 12000000, image: "https://images.unsplash.com/photo-1605281317010-fe5ffe798166?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "18–28 ft" },
+  { type: "pontoon", name: "Pontoon Boat", description: "Stable flat-deck boats for leisure and touring", startingPrice: 6500000, image: "https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "20–30 ft" },
+  { type: "cabin-cruiser", name: "Cabin Cruiser", description: "Comfortable cabin boats for extended voyages", startingPrice: 25000000, image: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "25–45 ft" },
+  { type: "catamaran", name: "Catamaran", description: "Twin-hull vessels with excellent stability", startingPrice: 18000000, image: "https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "24–50 ft" },
+  { type: "tugboat", name: "Tugboat", description: "Powerful tugboats for towing and harbour operations", startingPrice: 45000000, image: "https://images.unsplash.com/photo-1590073844006-33379778ae09?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "30–60 ft" },
+  { type: "barge", name: "Barge", description: "Flat-bottom cargo and transport barges", startingPrice: 35000000, image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=400&h=300&fit=crop&q=80", engineIncluded: false, lengthRange: "40–120 ft" },
+  { type: "patrol-boat", name: "Patrol Boat", description: "Military/security patrol and surveillance vessels", startingPrice: 20000000, image: "https://images.unsplash.com/photo-1559825481-12a05cc00344?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "20–45 ft" },
+  { type: "ferry", name: "Ferry", description: "Passenger and vehicle ferry boats", startingPrice: 55000000, image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "40–80 ft" },
+  { type: "workboat", name: "Workboat", description: "General-purpose industrial and utility workboats", startingPrice: 15000000, image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "20–50 ft" },
+  { type: "houseboat", name: "Houseboat", description: "Floating residential vessels with full amenities", startingPrice: 30000000, image: "https://images.unsplash.com/photo-1605281317010-fe5ffe798166?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "30–60 ft" },
+  { type: "yacht", name: "Yacht", description: "Luxury yachts for premium marine experience", startingPrice: 80000000, image: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "35–80 ft" },
+  { type: "dinghy", name: "Dinghy", description: "Small lightweight boats for tenders and short trips", startingPrice: 2500000, image: "https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=400&h=300&fit=crop&q=80", engineIncluded: false, lengthRange: "8–14 ft" },
+  { type: "jon-boat", name: "Jon Boat", description: "Flat-bottom aluminium boats for shallow waters", startingPrice: 3500000, image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop&q=80", engineIncluded: false, lengthRange: "10–20 ft" },
+  { type: "center-console", name: "Center Console", description: "Versatile boats with center helm for fishing and cruising", startingPrice: 10000000, image: "https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=400&h=300&fit=crop&q=80", engineIncluded: true, lengthRange: "18–36 ft" },
+  { type: "custom", name: "Custom Build", description: "Fully custom vessel to your exact specifications", startingPrice: 0, image: "https://images.unsplash.com/photo-1559825481-12a05cc00344?w=400&h=300&fit=crop&q=80", engineIncluded: false, lengthRange: "Any" },
 ];
 
 const materials = [
@@ -51,12 +51,12 @@ const materials = [
 ];
 
 const pastProjects = [
-  { name: "36ft Patrol Boat — Nigerian Navy", year: "2025", type: "patrol-boat", location: "Port Harcourt" },
-  { name: "28ft Sport Fishing Boat", year: "2025", type: "fishing-boat", location: "Lagos" },
-  { name: "45ft Passenger Ferry", year: "2024", type: "ferry", location: "Calabar" },
-  { name: "20ft Center Console", year: "2024", type: "center-console", location: "Warri" },
-  { name: "60ft Cargo Barge", year: "2024", type: "barge", location: "Bonny" },
-  { name: "50ft Luxury Houseboat", year: "2023", type: "houseboat", location: "Port Harcourt" },
+  { name: "36ft Patrol Boat — Nigerian Navy", year: "2025", type: "patrol-boat", location: "Port Harcourt", image: "https://images.unsplash.com/photo-1559825481-12a05cc00344?w=600&h=400&fit=crop&q=80" },
+  { name: "28ft Sport Fishing Boat", year: "2025", type: "fishing-boat", location: "Lagos", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop&q=80" },
+  { name: "45ft Passenger Ferry", year: "2024", type: "ferry", location: "Calabar", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&q=80" },
+  { name: "20ft Center Console", year: "2024", type: "center-console", location: "Warri", image: "https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=600&h=400&fit=crop&q=80" },
+  { name: "60ft Cargo Barge", year: "2024", type: "barge", location: "Bonny", image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=600&h=400&fit=crop&q=80" },
+  { name: "50ft Luxury Houseboat", year: "2023", type: "houseboat", location: "Port Harcourt", image: "https://images.unsplash.com/photo-1605281317010-fe5ffe798166?w=600&h=400&fit=crop&q=80" },
 ];
 
 export default function BoatBuildingPage() {
@@ -70,11 +70,9 @@ export default function BoatBuildingPage() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-gradient-to-r from-navy via-blue-900 to-navy py-20 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-20 w-96 h-96 border border-white/20 rounded-full" />
-          <div className="absolute bottom-10 right-20 w-64 h-64 border border-white/10 rounded-full" />
-        </div>
+      <section className="relative py-20 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=1920&h=700&fit=crop&q=80" alt="Boat building" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-blue-900/80 to-navy/70" />
         <div className="max-w-[1440px] mx-auto px-4 relative">
           <div className="flex items-center gap-2 text-blue-300 text-sm mb-4">
             <Link href="/" className="hover:text-white">Home</Link>
@@ -148,8 +146,8 @@ export default function BoatBuildingPage() {
                     : "border-border bg-white hover:border-blue/50 hover:shadow-md"
                 }`}
               >
-                <div className="w-full aspect-[4/3] bg-gradient-to-br from-blue-50 to-off-white rounded-lg mb-3 flex items-center justify-center">
-                  <Ship size={32} className={`${selectedVessel === vessel.type ? "text-blue" : "text-text-4"} group-hover:text-blue transition-colors`} />
+                <div className="w-full aspect-[4/3] rounded-lg mb-3 overflow-hidden">
+                  <img src={vessel.image} alt={vessel.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 </div>
                 <h3 className="font-syne font-bold text-sm text-text-1">{vessel.name}</h3>
                 <p className="text-xs text-text-4 mt-1 line-clamp-2">{vessel.description}</p>
@@ -490,8 +488,8 @@ export default function BoatBuildingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {pastProjects.map((project, i) => (
               <div key={i} className="bg-white rounded-xl border border-border overflow-hidden group cursor-pointer hover:shadow-lg transition-all">
-                <div className="aspect-video bg-gradient-to-br from-blue-50 to-off-white flex items-center justify-center">
-                  <Ship size={40} className="text-text-4/30 group-hover:text-blue/30 transition-colors" />
+                <div className="aspect-video overflow-hidden">
+                  <img src={project.image} alt={project.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 </div>
                 <div className="p-4">
                   <div className="flex items-center gap-2 mb-2">

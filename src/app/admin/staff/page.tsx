@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AdminShell from "@/components/admin/admin-shell";
 import { insforge } from "@/lib/insforge";
 import {
-  Edit2, Trash2, Loader2, Search, UserPlus, X, Plus,
+  Edit2, Trash2, Loader2, Search, UserPlus, X,
   ToggleLeft, ToggleRight, Shield, Mail, Phone, Eye, EyeOff,
   Key, Users,
 } from "lucide-react";
@@ -80,8 +80,13 @@ export default function StaffPage() {
     setShowModal(true);
   };
 
+  const [savingStaff, setSavingStaff] = useState(false);
+  const [inviteSent, setInviteSent] = useState<string | null>(null);
+
   const handleSave = async () => {
     if (!form.name.trim() || !form.email.trim()) return;
+    if (!editingStaff && !form.password.trim()) return;
+    setSavingStaff(true);
     const payload: Partial<StaffMember> = {
       name: form.name,
       email: form.email,
@@ -99,12 +104,18 @@ export default function StaffPage() {
         setStaff(staff.map(s => s.id === editingStaff.id ? { ...s, ...payload } as StaffMember : s));
       } else {
         payload.status = "invited";
+        payload.created_at = new Date().toISOString();
         const { data } = await insforge.database.from("staff").insert(payload).select("*");
         if (data?.[0]) setStaff([...staff, data[0]]);
+        setInviteSent(form.email);
+        setTimeout(() => setInviteSent(null), 5000);
       }
       setShowModal(false);
     } catch (e) {
       console.error("Failed to save staff:", e);
+      alert("Failed to save staff member. Please try again.");
+    } finally {
+      setSavingStaff(false);
     }
   };
 
@@ -325,7 +336,8 @@ export default function StaffPage() {
             </div>
             <div className="flex gap-2 p-5 border-t border-gray-100">
               <button onClick={() => setShowModal(false)} className="flex-1 h-10 rounded-lg border border-gray-200 text-sm font-medium text-text-3 hover:bg-gray-50">Cancel</button>
-              <button onClick={handleSave} className="flex-1 h-10 rounded-lg bg-blue text-white text-sm font-semibold hover:bg-blue-600">
+              <button onClick={handleSave} disabled={savingStaff} className="flex-1 h-10 rounded-lg bg-blue text-white text-sm font-semibold hover:bg-blue-600 disabled:opacity-50 flex items-center justify-center gap-2">
+                {savingStaff && <Loader2 size={14} className="animate-spin" />}
                 {editingStaff ? "Update" : "Send Invite & Create"}
               </button>
             </div>
@@ -367,6 +379,18 @@ export default function StaffPage() {
               <button onClick={() => { setViewStaff(null); openEdit(viewStaff); }} className="flex-1 h-10 rounded-lg bg-blue text-white text-sm font-semibold hover:bg-blue-600">Edit</button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Invite Sent Toast */}
+      {inviteSent && (
+        <div className="fixed bottom-6 right-6 z-50 bg-green-600 text-white px-5 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-in slide-in-from-bottom">
+          <Mail size={18} />
+          <div>
+            <p className="text-sm font-semibold">Invite Sent!</p>
+            <p className="text-xs opacity-80">Email invitation sent to {inviteSent}</p>
+          </div>
+          <button onClick={() => setInviteSent(null)} className="ml-2 opacity-70 hover:opacity-100"><X size={14} /></button>
         </div>
       )}
 

@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   Shovel,
   ArrowRight,
-  Waves,
   Ship,
   MapPin,
   FileText,
@@ -23,10 +22,12 @@ const capabilities = [
 ];
 
 const pastProjects = [
-  { name: "Bonny Channel Deepening", location: "Bonny, Rivers State", type: "Capital Dredging", year: "2025" },
-  { name: "Lagos Port Maintenance", location: "Apapa, Lagos", type: "Maintenance Dredging", year: "2025" },
-  { name: "Yenagoa Waterway Project", location: "Bayelsa State", type: "Land Reclamation", year: "2024" },
-  { name: "Warri River Cleanup", location: "Delta State", type: "Environmental Dredging", year: "2024" },
+  { name: "Bonny Channel Deepening", location: "Bonny, Rivers State", type: "Capital Dredging", year: "2025", image: "https://images.unsplash.com/photo-1590073844006-33379778ae09?w=600&h=300&fit=crop&q=80" },
+  { name: "Lagos Port Maintenance", location: "Apapa, Lagos", type: "Maintenance Dredging", year: "2025", image: "https://images.unsplash.com/photo-1559825481-12a05cc00344?w=600&h=300&fit=crop&q=80" },
+  { name: "Yenagoa Waterway Project", location: "Bayelsa State", type: "Land Reclamation", year: "2024", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=300&fit=crop&q=80" },
+  { name: "Warri River Cleanup", location: "Delta State", type: "Environmental Dredging", year: "2024", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=300&fit=crop&q=80" },
+  { name: "Onne Port Expansion", location: "Eleme, Rivers State", type: "Capital Dredging", year: "2024", image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=600&h=300&fit=crop&q=80" },
+  { name: "Escravos Bar Dredging", location: "Warri, Delta State", type: "Mining Dredging", year: "2023", image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=300&fit=crop&q=80" },
 ];
 
 export default function DredgingServicePage() {
@@ -41,8 +42,10 @@ export default function DredgingServicePage() {
       </div>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-amber-700 via-amber-800 to-amber-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="relative text-white py-20 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920&h=700&fit=crop&q=80" alt="Dredging operations" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-900/90 via-amber-800/80 to-amber-900/70" />
+        <div className="max-w-7xl mx-auto px-4 relative">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="flex items-center gap-2 mb-4">
@@ -61,9 +64,7 @@ export default function DredgingServicePage() {
               </Button>
             </div>
             <div className="hidden lg:flex items-center justify-center">
-              <div className="w-80 h-80 bg-amber-800/50 rounded-3xl flex items-center justify-center">
-                <Waves className="w-32 h-32 text-amber-400/30" />
-              </div>
+              <img src="https://images.unsplash.com/photo-1605281317010-fe5ffe798166?w=500&h=500&fit=crop&q=80" alt="Dredging equipment" className="w-80 h-80 rounded-3xl object-cover shadow-2xl border-4 border-white/10" />
             </div>
           </div>
         </div>
@@ -85,8 +86,34 @@ export default function DredgingServicePage() {
         </div>
       </section>
 
-      {/* Process */}
+      {/* Equipment Gallery */}
       <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="font-syne font-800 text-3xl text-text-1 mb-3 text-center">Our Equipment Fleet</h2>
+          <p className="text-text-3 text-center mb-10">Modern, well-maintained dredging equipment for every project scale</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { name: "Cutter Suction Dredger", desc: "For hard soil and rock dredging", image: "https://images.unsplash.com/photo-1590073844006-33379778ae09?w=400&h=300&fit=crop&q=80" },
+              { name: "Trailing Suction Hopper", desc: "For large-volume maintenance dredging", image: "https://images.unsplash.com/photo-1559825481-12a05cc00344?w=400&h=300&fit=crop&q=80" },
+              { name: "Backhoe Dredger", desc: "For precision nearshore dredging", image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=400&h=300&fit=crop&q=80" },
+              { name: "Survey & Support Vessels", desc: "Hydrographic survey and crew boats", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop&q=80" },
+            ].map((equip) => (
+              <div key={equip.name} className="rounded-xl border border-border overflow-hidden group">
+                <div className="h-40 relative overflow-hidden">
+                  <img src={equip.image} alt={equip.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-syne font-700 text-sm text-text-1">{equip.name}</h3>
+                  <p className="text-xs text-text-3 mt-1">{equip.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process */}
+      <section className="py-16 bg-off-white">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="font-syne font-800 text-3xl text-text-1 mb-10 text-center">Project Process</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
@@ -120,8 +147,9 @@ export default function DredgingServicePage() {
           <div className="grid sm:grid-cols-2 gap-6">
             {pastProjects.map((project) => (
               <div key={project.name} className="bg-white rounded-xl border border-border overflow-hidden">
-                <div className="h-40 bg-gradient-to-r from-amber-100 to-amber-50 flex items-center justify-center">
-                  <Waves className="w-16 h-16 text-amber-300" />
+                <div className="h-40 relative">
+                  <img src={project.image} alt={project.name} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                 </div>
                 <div className="p-5">
                   <h3 className="font-syne font-700 text-text-1 mb-1">{project.name}</h3>
