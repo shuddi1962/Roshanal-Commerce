@@ -92,7 +92,7 @@ export default function VendorProductsPage() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const { data: { user } } = await insforge.auth.getUser();
+      const { data: { user } } = await insforge.auth.getCurrentUser();
       if (!user) return;
       setVendorId(user.id);
 
